@@ -77,7 +77,7 @@
     
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/sfondo_001.jpg"/>
+            <ImageBrush ImageSource="C:\Users\franc\sources\RemoteRepositoty\SerialPortTool\Check.SPort\Resources\Image\sfondo_001.jpg"/>
         </Grid.Background>
         <Grid>
             <Grid.ColumnDefinitions>

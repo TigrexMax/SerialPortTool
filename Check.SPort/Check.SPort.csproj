@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <None Remove="Resources\Image\sfondo_001.jpg" />
-    <None Remove="sfondo_001.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,10 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Image\sfondo_001.jpg">
+    <Content Include="Resources\Image\sfondo_001.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="sfondo_001.jpg" />
+    </Content>
   </ItemGroup>
 
 </Project>
