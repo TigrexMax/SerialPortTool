@@ -4,32 +4,153 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sm="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Check.SPort"
         TextElement.Foreground="{DynamicResource MaterialDesignLightForeground}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignLightBackground}"
+        Background="White"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="Check Serial Port" Height="450" Width="800" WindowState="Normal" WindowStartupLocation="CenterScreen">
+        Title="Check Serial Port" Height="450" Width="900" WindowState="Normal" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="TxtStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Height" Value="55" />
+            <Setter Property="Width" Value="125" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1,1,1,2" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="IsReadOnly" Value="True">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="False" />
+                </Trigger>
+                <Trigger Property="IsReadOnly" Value="False">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CbxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Height" Value="55" />
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Padding" Value="10,0,10,5" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1,1,1,2" />
+            <Setter Property="md:ComboBoxAssist.ShowSelectedItem" Value="True" />
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="False" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TxtHint" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Width" Value="70" /> 
+            <Setter Property="Height" Value="55" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text.Length, ElementName=txtCMD}" Value="0">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     
     <Grid>
-        <StackPanel>
-            <TextBox x:Name="txtPortName" Margin="10"
-                     md:HintAssist.Hint="Inserisci il nome della porta (es. COM3)"
-                     md:TextFieldAssist.HasClearButton="True" />
+        <Grid.Background>
+            <ImageBrush ImageSource="/sfondo_001.jpg"/>
+        </Grid.Background>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <UniformGrid Columns="2">
+                <ComboBox x:Name="cbxPortName" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Porta COM" Style="{StaticResource TxtHint}" />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                </ComboBox>
+
+                <ComboBox x:Name="cbxBaudRate" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Baud Rate" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                    <ComboBoxItem Content="9600" />
+                    <ComboBoxItem Content="14400" />
+                    <ComboBoxItem Content="19200" />
+                </ComboBox>
+            </UniformGrid>
+
+            <UniformGrid Columns="2" Grid.Column="1">
+                <ComboBox Name="cbxParity" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Paraty" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                </ComboBox>
+
+                <ComboBox Name="cbxStopBits" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Stop Bits" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                </ComboBox>
+            </UniformGrid>
             
-            <TextBox x:Name="txtBaudRate" Margin="10" 
-                     md:HintAssist.Hint="Inserisci il Baud Rate (es. 9600)" 
-                     md:TextFieldAssist.HasClearButton="True" />
+            <Button x:Name="btnOpenClose" Margin="10" Content="OPEN" Grid.Row="0" Grid.Column="2"
+                    Style="{StaticResource MaterialDesignOutlinedDarkButton}" Width="70" Height="55"
+                    BorderBrush="Black" BorderThickness="1" Background="#FF4FE0F7" Click="BtnOpenClose_Click"
+                    IsEnabled="{Binding ElementName=txtCMD.}"/>
 
-            <ComboBox Name="cbxParity" Margin="10" Style="{StaticResource MaterialDesignFilledComboBox}" />
-            <ComboBox Name="cbxStopBits" Margin="10" Style="{StaticResource MaterialDesignFilledComboBox}" />
+            <Border Grid.Row="1" Grid.ColumnSpan="3">
+                <DockPanel HorizontalAlignment="Center">
+                    <TextBox x:Name="txtCMD" Background="#FFF3FAF3" Height="55" Width="650" 
+                             VerticalContentAlignment="Center" Padding="5,0" FontSize="18"
+                             md:HintAssist.Hint="COMANDO"
+                             md:TextFieldAssist.HasClearButton="True" />
+                    <Button x:Name="btnSend" Content="SEND" Grid.Row="0" Grid.Column="2"
+                            Style="{StaticResource SendButtonStyle}" 
+                            Background="#FF4FE0F7" Click="BtnSend_Click"/>
+                </DockPanel>
+            </Border>
 
-            <Button x:Name="btnInitialize" Margin="10" Content="OPEN"
-                    Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
-        </StackPanel>
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
+                <TextBox x:Name="txtResponse" Background="#FFF3FAF3" HorizontalContentAlignment="Stretch" Margin="10" Padding="5"
+                         md:HintAssist.Hint="Response commands" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

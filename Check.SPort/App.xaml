@@ -16,7 +16,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="PrimaryLightBrush" Color="Salmon"/>
-            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FFFFFF"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
