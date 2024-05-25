@@ -3,10 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Check.SPort"
+        TextElement.Foreground="{DynamicResource MaterialDesignLightForeground}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignLightBackground}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Check Serial Port" Height="450" Width="800" WindowState="Normal" WindowStartupLocation="CenterScreen">
+    
     <Grid>
+        <StackPanel>
+            <TextBox x:Name="txtPortName" Margin="10"
+                     md:HintAssist.Hint="Inserisci il nome della porta (es. COM3)"
+                     md:TextFieldAssist.HasClearButton="True" />
+            
+            <TextBox x:Name="txtBaudRate" Margin="10" 
+                     md:HintAssist.Hint="Inserisci il Baud Rate (es. 9600)" 
+                     md:TextFieldAssist.HasClearButton="True" />
 
+            <ComboBox Name="cbxParity" Margin="10" Style="{StaticResource MaterialDesignFilledComboBox}" />
+            <ComboBox Name="cbxStopBits" Margin="10" Style="{StaticResource MaterialDesignFilledComboBox}" />
+
+            <Button x:Name="btnInitialize" Margin="10" Content="OPEN"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"/>
+        </StackPanel>
     </Grid>
 </Window>

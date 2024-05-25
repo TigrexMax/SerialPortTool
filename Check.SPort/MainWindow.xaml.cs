@@ -8,17 +8,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO.Ports;
 
 namespace Check.SPort
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly SerialPort _serialPort = new();
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
     }
 }
