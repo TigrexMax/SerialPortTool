@@ -27,22 +27,34 @@ namespace Check.SPort
             _serialPort.NewLine = "\r\n";
             _serialPort.DataReceived += SerialPort_DataReceived;
             _serialPort.ErrorReceived += SerialPort_ErrorReceived;
+
+            this.KeyDown += MainWindow_KeyDown;
+        }
+
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Controlla se il tasto premuto è Enter
+            if (e.Key == Key.Enter)
+            {
+                // Chiama il metodo che vuoi eseguire
+                BtnSend_Click(this, new RoutedEventArgs());
+            }
         }
 
         private void SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-            txtResponse.Text += string.Format("Errore: {0}, codice: {1}{2}", Enum.GetName(e.EventType), (int)e.EventType, Environment.NewLine);
+            if (sender is SerialPort sp && sp.IsOpen)
+            {
+                Dispatcher.Invoke(() => ScriviResponse(string.Format("Errore: {0}, codice: {1}{2}", Enum.GetName(e.EventType), (int)e.EventType, Environment.NewLine)));
+            }
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (sender is SerialPort sp)
+            if (sender is SerialPort sp && sp.IsOpen)
             {
                 string indata = sp.ReadExisting();
-                Dispatcher.Invoke(() =>
-                {
-                    txtResponse.Text += string.Format("Response: {0}{1}", indata, Environment.NewLine);
-                });
+                Dispatcher.Invoke(() => ScriviResponse(string.Format("Response: {0}{1}", indata, Environment.NewLine)));
             }
         }
 
@@ -66,7 +78,7 @@ namespace Check.SPort
                     _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem.ToString(), out int velocitaPorta) ? velocitaPorta : 9600;
                     _serialPort.Parity = (Parity)cbxParity.SelectedItem;
                     _serialPort.StopBits = (StopBits)cbxStopBits.SelectedItem;
-                    
+
                     _serialPort.Open();
                     btnOpenClose.Content = "CLOSE";
                 }
@@ -75,24 +87,48 @@ namespace Check.SPort
                     _serialPort.WriteLine("Y");
                     _serialPort.Close();
                     btnOpenClose.Content = "OPEN";
+                    txtResponse.Text = string.Empty;
                 }
             }
             catch (Exception ex)
             {
-                txtResponse.AppendText(ex.Message);
+                ScriviResponse(string.Format("{0}{1}", ex.Message, Environment.NewLine));
             }
         }
 
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (_serialPort.IsOpen)
+            if (btnSend.IsEnabled)
             {
-                _serialPort.WriteLine(txtCMD.Text);
+                if (_serialPort.IsOpen)
+                {
+                    try
+                    {
+                        _serialPort.WriteLine(txtCMD.Text);
+                        txtCMD.Text = string.Empty;
+                    }
+                    catch (TimeoutException te)
+                    {
+                        ScriviResponse(string.Format("TIMEOUT: {0}{1}", te.Message, Environment.NewLine));
+                    }
+                    catch (Exception ex)
+                    {
+                        ScriviResponse(string.Format("ERROR: {0}{1}", ex.Message, Environment.NewLine));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, "La connessione con la porta risulta chiusa.", "Connesione Chiusa", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            else
-            {
-                MessageBox.Show(this, "La connessione con la porta risulta chiusa.", "Connesione Chiusa", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+        }
+
+        private void ScriviResponse(string riga)
+        {
+            if (txtResponse.Text.Length > 5000) txtResponse.Text = string.Empty;
+            txtResponse.Text += riga;
+            txtResponse.SelectionStart = txtResponse.Text.Length;
+            txtResponse.ScrollToEnd();
         }
     }
 }
