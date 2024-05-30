@@ -14,33 +14,19 @@
         Background="White"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="Check Serial Port" Height="450" Width="900" WindowState="Normal" WindowStartupLocation="CenterScreen">
+        Title="Check Serial Port" 
+        Height="450" Width="900" 
+        MinHeight="450" MinWidth="900" 
+        MaxHeight="450" MaxWidth="900" 
+        WindowState="Normal" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <Style x:Key="TxtStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
-            <Setter Property="FontSize" Value="18" />
+        <Style x:Key="CbxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="Height" Value="55" />
             <Setter Property="Width" Value="125" />
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="10,5" />
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="BorderThickness" Value="1,1,1,2" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Style.Triggers>
-                <Trigger Property="IsReadOnly" Value="True">
-                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="False" />
-                </Trigger>
-                <Trigger Property="IsReadOnly" Value="False">
-                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="True" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CbxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="Height" Value="55" />
-            <Setter Property="Width" Value="150" />
             <Setter Property="Padding" Value="10,0,10,5" />
-            <Setter Property="Margin" Value="0" />
+            <Setter Property="Margin" Value="5" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="BorderBrush" Value="Black" />
@@ -77,6 +63,9 @@
                 <DataTrigger Binding="{Binding Text.Length, ElementName=txtCMD}" Value="0">
                     <Setter Property="IsEnabled" Value="False"/>
                 </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1.0" />
+                </Trigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
@@ -94,10 +83,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <UniformGrid Columns="2">
+            <UniformGrid Columns="3" Rows="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
                 <ComboBox x:Name="cbxPortName" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
                     <md:HintAssist.Hint>
                         <StackPanel>
@@ -112,13 +101,11 @@
                             <TextBlock Text="Baud Rate" Style="{StaticResource TxtHint}"  />
                         </StackPanel>
                     </md:HintAssist.Hint>
-                    <ComboBoxItem Content="9600" />
+                    <ComboBoxItem Content="9600" IsSelected="True" />
                     <ComboBoxItem Content="14400" />
                     <ComboBoxItem Content="19200" />
                 </ComboBox>
-            </UniformGrid>
 
-            <UniformGrid Columns="2" Grid.Column="1">
                 <ComboBox Name="cbxParity" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
                     <md:HintAssist.Hint>
                         <StackPanel>
@@ -127,12 +114,39 @@
                     </md:HintAssist.Hint>
                 </ComboBox>
 
-                <ComboBox Name="cbxStopBits" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                <ComboBox Name="cbxStopBits" Style="{StaticResource CbxStyle}" Background="#FFEFB059" SelectedValuePath="Tag">
                     <md:HintAssist.Hint>
                         <StackPanel>
                             <TextBlock Text="Stop Bits" Style="{StaticResource TxtHint}"  />
                         </StackPanel>
                     </md:HintAssist.Hint>
+                    <ComboBoxItem Content="None" Tag="None" />
+                    <ComboBoxItem Content="1 stop bit" IsSelected="True" Tag="One" />
+                    <ComboBoxItem Content="1,5 stop bit" Tag="OnePointFive" />
+                    <ComboBoxItem Content="2 stop bit" Tag="Two" />
+                </ComboBox>
+
+                <ComboBox Name="cbxDatabits" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Databits" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                    <ComboBoxItem Content="5" />
+                    <ComboBoxItem Content="6" />
+                    <ComboBoxItem Content="7" />
+                    <ComboBoxItem Content="8" IsSelected="True" />
+                </ComboBox>
+
+                <ComboBox Name="cbxFlowControl" Style="{StaticResource CbxStyle}" Background="#FFEFB059" SelectedValuePath="Tag">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Flow controll" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                    <ComboBoxItem Content="Hardware" Tag="RequestToSend" />
+                    <ComboBoxItem Content="XonXoff" IsSelected="True" Tag="XOnXOff" />
+                    <ComboBoxItem Content="None" Tag="None" />
                 </ComboBox>
             </UniformGrid>
             

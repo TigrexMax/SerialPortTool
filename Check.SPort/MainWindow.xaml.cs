@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
+using System.Linq;
 
 namespace Check.SPort
 {
@@ -21,7 +22,6 @@ namespace Check.SPort
             InitializeComponent();
             SetComboBox();
 
-            _serialPort.Handshake = Handshake.XOnXOff;
             _serialPort.ReadTimeout = 1000;
             _serialPort.WriteTimeout = 1000;
             _serialPort.NewLine = "\r\n";
@@ -45,7 +45,7 @@ namespace Check.SPort
         {
             if (sender is SerialPort sp && sp.IsOpen)
             {
-                Dispatcher.Invoke(() => ScriviResponse(string.Format("Errore: {0}, codice: {1}{2}", Enum.GetName(e.EventType), (int)e.EventType, Environment.NewLine)));
+                Dispatcher.Invoke(() => ScriviResponseBox(string.Format("Errore: {0}, codice: {1}{2}", Enum.GetName(e.EventType), (int)e.EventType, Environment.NewLine)));
             }
         }
 
@@ -54,18 +54,17 @@ namespace Check.SPort
             if (sender is SerialPort sp && sp.IsOpen)
             {
                 string indata = sp.ReadExisting();
-                Dispatcher.Invoke(() => ScriviResponse(string.Format("Response: {0}{1}", indata, Environment.NewLine)));
+                Dispatcher.Invoke(() => ScriviResponseBox(string.Format("Response: {0}{1}", indata, Environment.NewLine)));
             }
         }
 
-        public void SetComboBox()
+        private void SetComboBox()
         {
             cbxPortName.ItemsSource = SerialPort.GetPortNames();
             cbxParity.ItemsSource = Enum.GetValues(typeof(Parity));
-            cbxStopBits.ItemsSource = Enum.GetValues(typeof(StopBits));
 
+            cbxPortName.SelectedIndex = 0;
             cbxParity.SelectedIndex = 0;
-            cbxStopBits.SelectedIndex = 0;
         }
 
         private void BtnOpenClose_Click(object sender, RoutedEventArgs e)
@@ -77,7 +76,9 @@ namespace Check.SPort
                     _serialPort.PortName = cbxPortName.SelectedItem?.ToString() ?? "COM3";
                     _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem.ToString(), out int velocitaPorta) ? velocitaPorta : 9600;
                     _serialPort.Parity = (Parity)cbxParity.SelectedItem;
-                    _serialPort.StopBits = (StopBits)cbxStopBits.SelectedItem;
+                    _serialPort.StopBits = Enum.Parse<StopBits>(cbxStopBits.SelectedValue?.ToString() ?? "One");
+                    _serialPort.DataBits = int.TryParse(cbxDatabits.SelectedItem.ToString(), out int dataBit) ? dataBit : 8;
+                    _serialPort.Handshake = Enum.Parse<Handshake>(cbxFlowControl.SelectedValue?.ToString() ?? "XOnXOff");
 
                     _serialPort.Open();
                     btnOpenClose.Content = "CLOSE";
@@ -92,7 +93,7 @@ namespace Check.SPort
             }
             catch (Exception ex)
             {
-                ScriviResponse(string.Format("{0}{1}", ex.Message, Environment.NewLine));
+                ScriviResponseBox(string.Format("{0}{1}", ex.Message, Environment.NewLine));
             }
         }
 
@@ -109,11 +110,11 @@ namespace Check.SPort
                     }
                     catch (TimeoutException te)
                     {
-                        ScriviResponse(string.Format("TIMEOUT: {0}{1}", te.Message, Environment.NewLine));
+                        ScriviResponseBox(string.Format("TIMEOUT: {0}{1}", te.Message, Environment.NewLine));
                     }
                     catch (Exception ex)
                     {
-                        ScriviResponse(string.Format("ERROR: {0}{1}", ex.Message, Environment.NewLine));
+                        ScriviResponseBox(string.Format("ERROR: {0}{1}", ex.Message, Environment.NewLine));
                     }
                 }
                 else
@@ -123,7 +124,7 @@ namespace Check.SPort
             }
         }
 
-        private void ScriviResponse(string riga)
+        private void ScriviResponseBox(string riga)
         {
             if (txtResponse.Text.Length > 5000) txtResponse.Text = string.Empty;
             txtResponse.Text += riga;
