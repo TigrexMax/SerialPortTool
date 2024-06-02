@@ -22,9 +22,10 @@ namespace Check.SPort
             InitializeComponent();
             SetComboBox();
 
-            _serialPort.ReadTimeout = 1000;
-            _serialPort.WriteTimeout = 1000;
-            _serialPort.NewLine = "\r\n";
+            _serialPort.ReadTimeout = 5000;
+            _serialPort.WriteTimeout = 5000;
+            _serialPort.NewLine = Environment.NewLine;
+            _serialPort.RtsEnable = true;
             _serialPort.DataReceived += SerialPort_DataReceived;
             _serialPort.ErrorReceived += SerialPort_ErrorReceived;
 
