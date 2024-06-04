@@ -80,7 +80,7 @@ namespace Check.SPort
                     if (_tcpClient == null)
                     {
                         _tcpClient = new();
-                        _tcpClient.Connect(IPAddress.Parse("192.168.1.17"), 9100);
+                        _tcpClient.Connect(IPAddress.Parse(txtIPAddress.Text), int.Parse(txtPortETH.Text));
                         btnOpenClose.Content = "CLOSE";
                     }
                     else
