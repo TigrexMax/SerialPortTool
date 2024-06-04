@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sm="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:Check.SPort"
+        xmlns:local="clr-namespace:Check.SPort" 
         TextElement.Foreground="{DynamicResource MaterialDesignLightForeground}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -18,9 +18,35 @@
         Height="450" Width="900" 
         MinHeight="450" MinWidth="900" 
         MaxHeight="450" MaxWidth="900" 
-        WindowState="Normal" WindowStartupLocation="CenterScreen">
+        WindowState="Normal" WindowStartupLocation="CenterScreen" Closed="Window_Closed">
 
     <Window.Resources>
+        <Style x:Key="TxtStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Height" Value="55" />
+            <Setter Property="Width" Value="125" />
+            <Setter Property="Padding" Value="10,0,10,5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1,1,1,2" />
+            <Setter Property="md:ComboBoxAssist.ShowSelectedItem" Value="True" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Content, ElementName=btnOpenClose}" Value="CLOSE">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Content, ElementName=btnOpenClose}" Value="OPEN">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="False" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="md:TextFieldAssist.HasClearButton" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="CbxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFilledComboBox}">
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Height" Value="55" />
@@ -55,7 +81,7 @@
         </Style>
         <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
             <Setter Property="Margin" Value="10" />
-            <Setter Property="Width" Value="75" /> 
+            <Setter Property="Width" Value="75" />
             <Setter Property="Height" Value="55" />
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="1" />
@@ -69,7 +95,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="\Resources\Image\sfondo_001.jpg"/>
@@ -78,7 +104,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -86,7 +112,7 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <UniformGrid Columns="3" Rows="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
+            <UniformGrid Columns="3" Rows="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Visibility="{Binding IsChecked, ElementName=rbtnSerial, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBox x:Name="cbxPortName" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
                     <md:HintAssist.Hint>
                         <StackPanel>
@@ -149,10 +175,50 @@
                     <ComboBoxItem Content="None" Tag="None" />
                 </ComboBox>
             </UniformGrid>
-            
-            <Button x:Name="btnOpenClose" Margin="10" Content="OPEN" Grid.Row="0" Grid.Column="2"
-                    Style="{StaticResource MaterialDesignOutlinedDarkButton}" Width="75" Height="55"
-                    BorderBrush="Black" BorderThickness="1" Background="#FF4FE0F7" Click="BtnOpenClose_Click" />
+
+            <UniformGrid Columns="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Visibility="{Binding IsChecked, ElementName=rbtnETH, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBox x:Name="txtIPAddress" Background="#FFEFB059" Text="192.168.1.17"
+                         Style="{StaticResource TxtStyle}" Width="155" MaxLength="15">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="IP Address" Style="{StaticResource TxtHint}"  />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                </TextBox>
+                <TextBox x:Name="txtPortETH" Text="9100" Background="#FFEFB059" Style="{StaticResource TxtStyle}">
+                    <md:HintAssist.Hint>
+                        <StackPanel>
+                            <TextBlock Text="Port" Style="{StaticResource TxtHint}" />
+                        </StackPanel>
+                    </md:HintAssist.Hint>
+                </TextBox>
+            </UniformGrid>
+
+            <UniformGrid Columns="2" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                
+                <StackPanel VerticalAlignment="Center" Margin="0,0,5,0">
+                    <RadioButton x:Name="rbtnSerial" GroupName="ETH" Padding="1,2" IsChecked="True" Style="{StaticResource MaterialDesignRadioButton}"
+                                 Background="Black">
+                        <RadioButton.Content>
+                            <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
+                                <TextBlock Text="Seriale" FontWeight="Black" />
+                            </Border>
+                        </RadioButton.Content>
+                    </RadioButton>
+                    <RadioButton x:Name="rbtnETH" GroupName="ETH" Padding="1,2" Style="{StaticResource MaterialDesignRadioButton}"
+                                 Background="Black">
+                        <RadioButton.Content>
+                            <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
+                                <TextBlock Text="ETHERNET" FontWeight="Black" />
+                            </Border>
+                        </RadioButton.Content>
+                    </RadioButton>
+                </StackPanel>
+
+                <Button x:Name="btnOpenClose" Margin="10" Content="OPEN"
+                        Style="{StaticResource MaterialDesignOutlinedDarkButton}" Width="75" Height="55"
+                        BorderBrush="Black" BorderThickness="1" Background="#FF4FE0F7" Click="BtnOpenClose_Click" />
+            </UniformGrid>
 
             <Border Grid.Row="1" Grid.ColumnSpan="3">
                 <DockPanel HorizontalAlignment="Center">
