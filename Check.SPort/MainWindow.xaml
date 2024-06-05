@@ -85,6 +85,7 @@
             <Setter Property="Height" Value="55" />
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="md:HintAssist.IsFloating" Value="False" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Text.Length, ElementName=txtCMD}" Value="0">
                     <Setter Property="IsEnabled" Value="False"/>
@@ -93,6 +94,24 @@
                     <Setter Property="Opacity" Value="1.0" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style x:Key="TxtResponseCmd" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="Margin" Value="7,0,5,7" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="md:HintAssist.Hint" Value="Response commands" />
+        </Style>
+        <Style x:Key="BtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
+            <Setter Property="Margin" Value="5,7" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="1" />
         </Style>
     </Window.Resources>
 
@@ -108,8 +127,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <UniformGrid Columns="3" Rows="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Visibility="{Binding IsChecked, ElementName=rbtnSerial, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -195,10 +214,10 @@
             </UniformGrid>
 
             <UniformGrid Columns="2" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                
-                <StackPanel VerticalAlignment="Center" Margin="0,0,5,0">
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,5,0">
                     <RadioButton x:Name="rbtnSerial" GroupName="ETH" Padding="1,2" IsChecked="True" Style="{StaticResource MaterialDesignRadioButton}"
-                                 Background="Black">
+                                 Background="Black" Click="ControlloChangeRB_Click">
                         <RadioButton.Content>
                             <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
                                 <TextBlock Text="Seriale" FontWeight="Black" />
@@ -206,7 +225,7 @@
                         </RadioButton.Content>
                     </RadioButton>
                     <RadioButton x:Name="rbtnETH" GroupName="ETH" Padding="1,2" Style="{StaticResource MaterialDesignRadioButton}"
-                                 Background="Black">
+                                 Background="Black" Click="ControlloChangeRB_Click">
                         <RadioButton.Content>
                             <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
                                 <TextBlock Text="ETHERNET" FontWeight="Black" />
@@ -215,9 +234,8 @@
                     </RadioButton>
                 </StackPanel>
 
-                <Button x:Name="btnOpenClose" Margin="10" Content="OPEN"
-                        Style="{StaticResource MaterialDesignOutlinedDarkButton}" Width="75" Height="55"
-                        BorderBrush="Black" BorderThickness="1" Background="#FF4FE0F7" Click="BtnOpenClose_Click" />
+                <Button x:Name="btnOpenClose" Background="#FF4FE0F7" Click="BtnOpenClose_Click" Content="OPEN"
+                        Style="{StaticResource BtnStyle}" Width="125" Height="55" FontSize="20" Cursor="" />
             </UniformGrid>
 
             <Border Grid.Row="1" Grid.ColumnSpan="3">
@@ -232,11 +250,22 @@
                 </DockPanel>
             </Border>
 
-            <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
-                <TextBox x:Name="txtResponse" Background="#FFF3FAF3" HorizontalContentAlignment="Stretch" Margin="10" Padding="5"
-                         md:HintAssist.Hint="Response commands" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"
-                         VerticalScrollBarVisibility="Auto" Height="150"/>
-            </StackPanel>
+            <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="3">
+                <TextBox x:Name="txtResponse" Background="#FFF3FAF3" Style="{StaticResource TxtResponseCmd}" />
+
+                <DockPanel>
+                    <Button x:Name="btnFileCmd" Click="BtnFileCmd_Click" Background="#FF4FE0F7"
+                            Style="{StaticResource BtnStyle}" Width="135" Height="55">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="FileDocumentBox" Width="50" Height="50" VerticalAlignment="Center" />
+                                <TextBlock Text="Apri File CMD" TextWrapping="Wrap" Margin="1,0,0,0" Width="60" Height="35" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </DockPanel>
+            </UniformGrid>
+
         </Grid>
     </Grid>
 </Window>

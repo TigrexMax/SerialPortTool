@@ -12,6 +12,8 @@ using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Check.SPort
 {
@@ -77,46 +79,56 @@ namespace Check.SPort
             {
                 if (rbtnETH.IsChecked ?? false)
                 {
-                    if (_tcpClient == null)
-                    {
-                        _tcpClient = new();
-                        _tcpClient.Connect(IPAddress.Parse(txtIPAddress.Text), int.Parse(txtPortETH.Text));
-                        btnOpenClose.Content = "CLOSE";
-                    }
-                    else
-                    {
-                        _tcpClient.Close();
-                        _tcpClient = null;
-                        btnOpenClose.Content = "OPEN";
-                        txtResponse.Text = string.Empty;
-                    }
+                    OpenCloseETH();
                 }
                 else
                 {
-                    if (!_serialPort.IsOpen)
-                    {
-                        _serialPort.PortName = cbxPortName.SelectedItem?.ToString() ?? "COM3";
-                        _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem.ToString(), out int velocitaPorta) ? velocitaPorta : 9600;
-                        _serialPort.Parity = (Parity)cbxParity.SelectedItem;
-                        _serialPort.StopBits = Enum.Parse<StopBits>(cbxStopBits.SelectedValue?.ToString() ?? "One");
-                        _serialPort.DataBits = int.TryParse(cbxDatabits.SelectedItem.ToString(), out int dataBit) ? dataBit : 8;
-                        _serialPort.Handshake = Enum.Parse<Handshake>(cbxFlowControl.SelectedValue?.ToString() ?? "XOnXOff");
-
-                        _serialPort.Open();
-                        btnOpenClose.Content = "CLOSE";
-                    }
-                    else
-                    {
-                        _serialPort.WriteLine("Y");
-                        _serialPort.Close();
-                        btnOpenClose.Content = "OPEN";
-                        txtResponse.Text = string.Empty;
-                    }
+                    OpenCloseSerialPort();
                 }
             }
             catch (Exception ex)
             {
                 ScriviResponseBox(string.Format("{0}{1}", ex.Message, Environment.NewLine));
+            }
+        }
+
+        private void OpenCloseSerialPort()
+        {
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.PortName = cbxPortName.SelectedItem?.ToString() ?? "COM3";
+                _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem.ToString(), out int velocitaPorta) ? velocitaPorta : 9600;
+                _serialPort.Parity = (Parity)cbxParity.SelectedItem;
+                _serialPort.StopBits = Enum.Parse<StopBits>(cbxStopBits.SelectedValue?.ToString() ?? "One");
+                _serialPort.DataBits = int.TryParse(cbxDatabits.SelectedItem.ToString(), out int dataBit) ? dataBit : 8;
+                _serialPort.Handshake = Enum.Parse<Handshake>(cbxFlowControl.SelectedValue?.ToString() ?? "XOnXOff");
+
+                _serialPort.Open();
+                btnOpenClose.Content = "CLOSE";
+            }
+            else
+            {
+                _serialPort.WriteLine("Y");
+                _serialPort.Close();
+                btnOpenClose.Content = "OPEN";
+                txtResponse.Text = string.Empty;
+            }
+        }
+
+        private void OpenCloseETH()
+        {
+            if (_tcpClient == null)
+            {
+                _tcpClient = new();
+                _tcpClient.Connect(IPAddress.Parse(txtIPAddress.Text), int.Parse(txtPortETH.Text));
+                btnOpenClose.Content = "CLOSE";
+            }
+            else
+            {
+                _tcpClient.Close();
+                _tcpClient = null;
+                btnOpenClose.Content = "OPEN";
+                txtResponse.Text = string.Empty;
             }
         }
 
@@ -187,6 +199,40 @@ namespace Check.SPort
             {
                 _serialPort.WriteLine("Y");
                 _serialPort.Close();
+            }
+        }
+
+        private void BtnFileCmd_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new()
+            {
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                FileInfo fi = new(ofd.FileName);
+                StreamReader sr = new(fi.FullName);
+                while(sr.Peek() > 0)
+                {
+                    txtCMD.Text = sr.ReadLine();
+                    BtnSend_Click(sender, e);
+                }
+            }
+        }
+
+        private void ControlloChangeRB_Click(object sender, RoutedEventArgs e)
+        {
+            var rb = (RadioButton)sender;
+            if (rb is RadioButton rbSerial && rbSerial.Name == "rbtnSerial" && _tcpClient?.Connected == true)
+            {
+                OpenCloseETH();
+            }
+
+            if (rb is RadioButton rbETH && rbETH.Name == "rbtnETH" && _serialPort.IsOpen)
+            {
+                OpenCloseSerialPort();
             }
         }
     }
