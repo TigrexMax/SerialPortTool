@@ -10,23 +10,17 @@ using System.Windows.Data;
 
 namespace Check.SPort.Validations
 {
-    public class IPAddressValidator : IValueConverter
+    public class IPAddressValidator : ValidationRule
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            return null;
-        }
+            string? ipString = value as string;
+            bool isValid = IPAddress.TryParse(ipString, out _);
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string? userInput = value as string;
-            if (string.IsNullOrEmpty(userInput))
-                return null;
-
-            if (IPAddress.TryParse(userInput, out IPAddress? address) && address.ToString() == userInput)
-                return address;
+            if (isValid)
+                return new ValidationResult(true, null);
             else
-                return null;
+                return new ValidationResult(false, "Indirizzo IP non valido");
         }
     }
 }

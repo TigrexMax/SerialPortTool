@@ -1,7 +1,8 @@
 ﻿<Application x:Class="Check.SPort.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Check.SPort"
+             xmlns:view="clr-namespace:Check.SPort.View"
+             xmlns:vm="clr-namespace:Check.SPort.ViewModel"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -15,7 +16,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ObsoleteBrushes.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="PrimaryLightBrush" Color="Salmon"/>
+            <!-- DataTemplate -->
+            <DataTemplate DataType="{x:Type vm:MainViewModel}">
+                <view:MainView />
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
