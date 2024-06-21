@@ -10,6 +10,9 @@
     <StartupObject></StartupObject>
     <PackageIcon></PackageIcon>
     <UseWindowsForms>False</UseWindowsForms>
+    <AssemblyName>Check Connection Protocoll</AssemblyName>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
