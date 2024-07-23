@@ -205,10 +205,22 @@ namespace Check.SPort.View
             {
                 FileInfo fi = new(ofd.FileName);
                 StreamReader sr = new(fi.FullName);
-                while (sr.Peek() > 0)
+                try
                 {
-                    txtCMD.Text = sr.ReadLine();
-                    BtnSend_Click(sender, e);
+                    while (sr.Peek() > 0)
+                    {
+                        txtCMD.Text = sr.ReadLine();
+                        BtnSend_Click(sender, e);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    sr.Dispose();
+                    sr.Close();
                 }
             }
         }
