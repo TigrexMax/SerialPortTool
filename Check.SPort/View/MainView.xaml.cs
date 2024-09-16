@@ -111,13 +111,13 @@ namespace Check.SPort.View
 
                 _serialPort.Open();
                 btnOpenClose.Content = "CLOSE";
+                txtResponse.Text = string.Empty;
             }
             else
             {
                 _serialPort.WriteLine("Y");
                 _serialPort.Close();
                 btnOpenClose.Content = "OPEN";
-                txtResponse.Text = string.Empty;
             }
         }
 
@@ -128,17 +128,17 @@ namespace Check.SPort.View
                 _tcpClient = new();
                 _tcpClient.Connect(IPAddress.Parse(txtIPAddress.Text), int.Parse(txtPortETH.Text));
                 btnOpenClose.Content = "CLOSE";
+                txtResponse.Text = string.Empty;
             }
             else
             {
                 _tcpClient.Close();
                 _tcpClient = null;
                 btnOpenClose.Content = "OPEN";
-                txtResponse.Text = string.Empty;
             }
         }
 
-        private void BtnSend_Click(object sender, RoutedEventArgs e)
+        private async void BtnSend_Click(object sender, RoutedEventArgs e)
         {
             if (btnSend.IsEnabled)
             {
@@ -172,8 +172,26 @@ namespace Check.SPort.View
                         if (_tcpClient?.Connected == true)
                         {
                             byte[] buffer = Encoding.ASCII.GetBytes(txtCMD.Text);
+                            byte[] resposeBuffer = new byte[512];
                             NetworkStream stream = _tcpClient.GetStream();
-                            stream.Write(buffer, 0, buffer.Length);
+                            await stream.WriteAsync(buffer, 0, buffer.Length);
+                            await stream.FlushAsync();
+
+                            var readTask = stream.ReadAsync(resposeBuffer, 0, resposeBuffer.Length);
+                            if (await Task.WhenAny(readTask, Task.Delay(5000)) == readTask)
+                            {
+                                int bytesRead = await readTask;
+                                if (bytesRead > 0)
+                                {
+                                    string response = Encoding.ASCII.GetString(resposeBuffer, 0, bytesRead);
+                                    ScriviResponseBox(response);
+                                    ScriviResponseBox(Environment.NewLine);
+                                }
+                            }
+                            else
+                            {
+                                ScriviResponseBox("Timeout di ricezione scaduto.\n");
+                            }
                             txtCMD.Text = string.Empty;
                         }
                     }
