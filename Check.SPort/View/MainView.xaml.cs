@@ -171,22 +171,38 @@ namespace Check.SPort.View
                     {
                         if (_tcpClient?.Connected == true)
                         {
+                            byte[] controlCode = new byte[2];
                             byte[] buffer = Encoding.ASCII.GetBytes(txtCMD.Text);
-                            byte[] resposeBuffer = new byte[512];
                             NetworkStream stream = _tcpClient.GetStream();
-                            await stream.WriteAsync(buffer, 0, buffer.Length);
-                            await stream.FlushAsync();
+                            await SendCommandAsync(buffer, stream);
 
-                            var readTask = stream.ReadAsync(resposeBuffer, 0, resposeBuffer.Length);
+                            var readTask = ReceiveResponseAsync(stream);
                             if (await Task.WhenAny(readTask, Task.Delay(5000)) == readTask)
                             {
-                                int bytesRead = await readTask;
-                                if (bytesRead > 0)
+                                byte[] resposeBuffer = await readTask;
+
+                                // Supponiamo che gli ultimi 2 byte siano i codici di controllo
+                                controlCode[0] = resposeBuffer[^3];
+                                controlCode[1] = resposeBuffer[^2];
+
+                                string flusso = Encoding.ASCII.GetString(controlCode, 0, controlCode.Length);
+
+                                if (flusso == "14") // NAK
                                 {
-                                    string response = Encoding.ASCII.GetString(resposeBuffer, 0, bytesRead);
-                                    ScriviResponseBox(response);
-                                    ScriviResponseBox(Environment.NewLine);
+                                    ScriviResponseBox("Errore ricevuto (NAK), in attesa di riprovare...\n");
+                                    // Puoi decidere se vuoi reinviare il comando o gestire diversamente
+                                    // Aspetta un po' prima di ritentare
+                                    await Task.Delay(1000);
+                                    await SendCommandAsync(buffer, stream); // Ritenta l'invio
                                 }
+                                else if (flusso == "11") // Xon
+                                {
+                                    ScriviResponseBox("Via libera ricevuta (Xon), posso continuare.\n");
+                                }
+
+                                string response = Encoding.ASCII.GetString(resposeBuffer, 0, resposeBuffer.Length);
+                                ScriviResponseBox(response);
+                                ScriviResponseBox(Environment.NewLine);
                             }
                             else
                             {
@@ -201,6 +217,21 @@ namespace Check.SPort.View
                     }
                 }
             }
+        }
+
+        private static async Task SendCommandAsync(byte[] buffer, NetworkStream stream)
+        {
+            await stream.WriteAsync(buffer, 0, buffer.Length);
+            await stream.FlushAsync();
+        }
+
+        private static async Task<byte[]> ReceiveResponseAsync(NetworkStream stream)
+        {
+            byte[] buffer = new byte[256]; // Supponiamo che la risposta abbia massimo 256 byte
+            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+
+            // Restituisce solo la parte letta del buffer
+            return buffer.Take(bytesRead).ToArray();
         }
 
         private void ScriviResponseBox(string riga)
@@ -227,9 +258,10 @@ namespace Check.SPort.View
                 {
                     while (sr.Peek() > 0)
                     {
-                        txtCMD.Text = sr.ReadLine();
-                        BtnSend_Click(sender, e);
+                        txtCMD.Text += sr.ReadLine();
+                        txtCMD.Text += Environment.NewLine;
                     }
+                    BtnSend_Click(sender, e);
                 }
                 catch (Exception)
                 {
