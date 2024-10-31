@@ -204,10 +204,6 @@ namespace Check.SPort.View
                                 ScriviResponseBox(response);
                                 ScriviResponseBox(Environment.NewLine);
                             }
-                            else
-                            {
-                                ScriviResponseBox("Timeout di ricezione scaduto.\n");
-                            }
                             txtCMD.Text = string.Empty;
                         }
                     }
