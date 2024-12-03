@@ -176,17 +176,14 @@ namespace Check.SPort.View
                             NetworkStream stream = _tcpClient.GetStream();
                             await SendCommandAsync(buffer, stream);
 
-                            var readTask = ReceiveResponseAsync(stream);
-                            if (await Task.WhenAny(readTask, Task.Delay(5000)) == readTask)
+                            byte[] resposeBuffer = await ReceiveResponseAsync(stream);
+                            if (resposeBuffer.Length > 0)
                             {
-                                byte[] resposeBuffer = await readTask;
-
                                 // Supponiamo che gli ultimi 2 byte siano i codici di controllo
                                 controlCode[0] = resposeBuffer[^3];
                                 controlCode[1] = resposeBuffer[^2];
 
                                 string flusso = Encoding.ASCII.GetString(controlCode, 0, controlCode.Length);
-
                                 if (flusso == "14") // NAK
                                 {
                                     ScriviResponseBox("Errore ricevuto (NAK), in attesa di riprovare...\n");
@@ -254,10 +251,9 @@ namespace Check.SPort.View
                 {
                     while (sr.Peek() > 0)
                     {
-                        txtCMD.Text += sr.ReadLine();
-                        txtCMD.Text += Environment.NewLine;
+                        txtCMD.Text = sr.ReadLine();
+                        BtnSend_Click(sender, e);
                     }
-                    BtnSend_Click(sender, e);
                 }
                 catch (Exception)
                 {
@@ -267,6 +263,7 @@ namespace Check.SPort.View
                 {
                     sr.Dispose();
                     sr.Close();
+                    txtCMD.Text = string.Empty;
                 }
             }
         }
