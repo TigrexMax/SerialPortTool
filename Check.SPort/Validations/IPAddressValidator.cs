@@ -17,10 +17,7 @@ namespace Check.SPort.Validations
             string? ipString = value as string;
             bool isValid = IPAddress.TryParse(ipString, out _);
 
-            if (isValid)
-                return new ValidationResult(true, null);
-            else
-                return new ValidationResult(false, "Indirizzo IP non valido");
+            return isValid ? new ValidationResult(true, null) : new ValidationResult(false, "Indirizzo IP non valido");
         }
     }
 }

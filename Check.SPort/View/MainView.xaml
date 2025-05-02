@@ -97,12 +97,9 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="Margin" Value="7,0,5,7" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="AcceptsReturn" Value="True" />
-            <Setter Property="md:HintAssist.Hint" Value="Response commands" />
         </Style>
         <Style x:Key="BtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
             <Setter Property="Margin" Value="5,7" />
@@ -152,7 +149,7 @@
                 <ComboBox Name="cbxParity" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
                     <md:HintAssist.Hint>
                         <StackPanel>
-                            <TextBlock Text="Paraty" Style="{StaticResource TxtHint}"  />
+                            <TextBlock Text="Parity" Style="{StaticResource TxtHint}"  />
                         </StackPanel>
                     </md:HintAssist.Hint>
                 </ComboBox>
@@ -195,7 +192,7 @@
 
             <UniformGrid Columns="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Visibility="{Binding IsChecked, ElementName=rbtnETH, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBox x:Name="txtIPAddress" Background="#FFEFB059" Style="{StaticResource TxtStyle}" Width="155" MaxLength="15"
-                         Text="192.168.1.17">
+                         Text="192.168.1.15" AutomationProperties.Name="IP Address">
                     <md:HintAssist.Hint>
                         <StackPanel>
                             <TextBlock Text="IP Address" Style="{StaticResource TxtHint}"  />
@@ -215,7 +212,7 @@
 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,5,0">
                     <RadioButton x:Name="rbtnSerial" GroupName="ETH" Padding="1,2" IsChecked="True" Style="{StaticResource MaterialDesignRadioButton}"
-                         Background="Black" Click="ControlloChangeRB_Click">
+                                 Background="Black" Click="ControlloChangeRB_Click">
                         <RadioButton.Content>
                             <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
                                 <TextBlock Text="Seriale" FontWeight="Black" />
@@ -223,7 +220,7 @@
                         </RadioButton.Content>
                     </RadioButton>
                     <RadioButton x:Name="rbtnETH" GroupName="ETH" Padding="1,2" Style="{StaticResource MaterialDesignRadioButton}"
-                         Background="Black" Click="ControlloChangeRB_Click">
+                                 Background="Black" Click="ControlloChangeRB_Click">
                         <RadioButton.Content>
                             <Border BorderThickness="1" BorderBrush="Purple" CornerRadius="2" Background="Azure" Padding="5,1">
                                 <TextBlock Text="ETHERNET" FontWeight="Black" />
@@ -233,28 +230,28 @@
                 </StackPanel>
 
                 <Button x:Name="btnOpenClose" Background="#FF4FE0F7" Click="BtnOpenClose_Click" Content="OPEN"
-                Style="{StaticResource BtnStyle}" Width="125" Height="55" FontSize="20" Cursor="" />
+                        Style="{StaticResource BtnStyle}" Width="125" Height="55" FontSize="20" Cursor="Hand" />
             </UniformGrid>
 
             <Border Grid.Row="1" Grid.ColumnSpan="3">
                 <DockPanel HorizontalAlignment="Center">
                     <TextBox x:Name="txtCMD" Background="#FFF3FAF3" Height="55" Width="650" 
-                     VerticalContentAlignment="Center" Padding="5,0" FontSize="18"
-                     md:HintAssist.Hint="COMANDO"
-                     md:TextFieldAssist.HasClearButton="True" />
+                             VerticalContentAlignment="Center" Padding="5,0" FontSize="18"
+                             md:HintAssist.Hint="COMANDO"
+                             md:TextFieldAssist.HasClearButton="True" />
                     <Button x:Name="btnSend" Grid.Row="0" Grid.Column="2"
-                    Style="{StaticResource SendButtonStyle}" 
-                    Background="#FF4FE0F7" Click="BtnSend_Click"
-                    Content="{md:PackIcon Kind=Send, Size=45}" />
+                            Style="{StaticResource SendButtonStyle}" 
+                            Background="#FF4FE0F7" Click="BtnSend_Click"
+                            Content="{md:PackIcon Kind=Send, Size=45}" />
                 </DockPanel>
             </Border>
 
             <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="3">
-                <TextBox x:Name="txtResponse" Background="#FFF3FAF3" Style="{StaticResource TxtResponseCmd}" />
+                <TextBox x:Name="txtResponse" Background="#FFECECEC" Foreground="DarkSlateGray" Style="{StaticResource TxtResponseCmd}" />
 
                 <DockPanel>
                     <Button x:Name="btnFileCmd" Click="BtnFileCmd_Click" Background="#FF4FE0F7"
-                    Style="{StaticResource BtnStyle}" Width="135" Height="55">
+                            Style="{StaticResource BtnStyle}" Width="135" Height="55">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <md:PackIcon Kind="FileDocumentBox" Width="50" Height="50" VerticalAlignment="Center" />

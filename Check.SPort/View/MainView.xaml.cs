@@ -27,20 +27,26 @@ namespace Check.SPort.View
     {
         private readonly SerialPort _serialPort = new();
         private TcpClient? _tcpClient = null;
+        private const string NAK_CODE = "14";
+        private const string XON_CODE = "11";
 
         public MainView()
         {
             InitializeComponent();
             SetComboBox();
+            InitializeSerialPort();
+            this.KeyDown += MainWindow_KeyDown;
+            Application.Current.Exit += OnAppExit;
+        }
 
+        private void InitializeSerialPort()
+        {
             _serialPort.ReadTimeout = 5000;
             _serialPort.WriteTimeout = 5000;
             _serialPort.NewLine = Environment.NewLine;
             _serialPort.RtsEnable = true;
             _serialPort.DataReceived += SerialPort_DataReceived;
             _serialPort.ErrorReceived += SerialPort_ErrorReceived;
-
-            this.KeyDown += MainWindow_KeyDown;
         }
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -49,7 +55,7 @@ namespace Check.SPort.View
             if (e.Key == Key.Enter)
             {
                 // Chiama il metodo che vuoi eseguire
-                BtnSend_Click(this, new RoutedEventArgs());
+                _ = BtnSendAsync();
             }
         }
 
@@ -57,7 +63,7 @@ namespace Check.SPort.View
         {
             if (sender is SerialPort sp && sp.IsOpen)
             {
-                Dispatcher.Invoke(() => ScriviResponseBox(string.Format("Errore: {0}, codice: {1}{2}", Enum.GetName(e.EventType), (int)e.EventType, Environment.NewLine)));
+                Dispatcher.Invoke(() => ScriviResponseBox($"Errore: {Enum.GetName(e.EventType)}, codice: {(int)e.EventType}"));
             }
         }
 
@@ -66,7 +72,7 @@ namespace Check.SPort.View
             if (sender is SerialPort sp && sp.IsOpen)
             {
                 string indata = sp.ReadExisting();
-                Dispatcher.Invoke(() => ScriviResponseBox(string.Format("Response: {0}{1}", indata, Environment.NewLine)));
+                Dispatcher.Invoke(() => ScriviResponseBox($"Response: {indata}"));
             }
         }
 
@@ -74,7 +80,6 @@ namespace Check.SPort.View
         {
             cbxPortName.ItemsSource = SerialPort.GetPortNames();
             cbxParity.ItemsSource = Enum.GetValues(typeof(Parity));
-
             cbxPortName.SelectedIndex = 0;
             cbxParity.SelectedIndex = 0;
         }
@@ -83,18 +88,14 @@ namespace Check.SPort.View
         {
             try
             {
-                if (rbtnETH.IsChecked ?? false)
-                {
+                if (rbtnETH.IsChecked == true)
                     OpenCloseETH();
-                }
                 else
-                {
                     OpenCloseSerialPort();
-                }
             }
             catch (Exception ex)
             {
-                ScriviResponseBox(string.Format("{0}{1}", ex.Message, Environment.NewLine));
+                ScriviResponseBox($"{ex.Message}");
             }
         }
 
@@ -102,16 +103,23 @@ namespace Check.SPort.View
         {
             if (!_serialPort.IsOpen)
             {
-                _serialPort.PortName = cbxPortName.SelectedItem?.ToString() ?? "COM3";
-                _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem.ToString(), out int velocitaPorta) ? velocitaPorta : 9600;
-                _serialPort.Parity = (Parity)cbxParity.SelectedItem;
-                _serialPort.StopBits = Enum.Parse<StopBits>(cbxStopBits.SelectedValue?.ToString() ?? "One");
-                _serialPort.DataBits = int.TryParse(cbxDatabits.SelectedItem.ToString(), out int dataBit) ? dataBit : 8;
-                _serialPort.Handshake = Enum.Parse<Handshake>(cbxFlowControl.SelectedValue?.ToString() ?? "XOnXOff");
+                try
+                {
+                    _serialPort.PortName = cbxPortName.SelectedItem?.ToString() ?? "COM3";
+                    _serialPort.BaudRate = int.TryParse(cbxBaudRate.SelectedItem?.ToString(), out int baud) ? baud : 9600;
+                    _serialPort.Parity = (Parity)cbxParity.SelectedItem;
+                    _serialPort.StopBits = Enum.Parse<StopBits>(cbxStopBits.SelectedValue?.ToString() ?? "One");
+                    _serialPort.DataBits = int.TryParse(cbxDatabits.SelectedItem?.ToString(), out int dataBits) ? dataBits : 8;
+                    _serialPort.Handshake = Enum.Parse<Handshake>(cbxFlowControl.SelectedValue?.ToString() ?? "XOnXOff");
 
-                _serialPort.Open();
-                btnOpenClose.Content = "CLOSE";
-                txtResponse.Text = string.Empty;
+                    _serialPort.Open();
+                    btnOpenClose.Content = "CLOSE";
+                    txtResponse.Clear();
+                }
+                catch (Exception ex)
+                {
+                    ScriviResponseBox($"Impossibile aprire la porta seriale: {ex.Message}");
+                }
             }
             else
             {
@@ -125,117 +133,108 @@ namespace Check.SPort.View
         {
             if (_tcpClient == null)
             {
-                _tcpClient = new();
-                _tcpClient.Connect(IPAddress.Parse(txtIPAddress.Text), int.Parse(txtPortETH.Text));
+                if (!IPAddress.TryParse(txtIPAddress.Text, out IPAddress? ip) || !int.TryParse(txtPortETH.Text, out int port))
+                {
+                    MessageBox.Show("IP o porta non validi.", "Errore", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                _tcpClient = new TcpClient();
+                _tcpClient.Connect(ip, port);
                 btnOpenClose.Content = "CLOSE";
-                txtResponse.Text = string.Empty;
+                txtResponse.Clear();
+                btnFileCmd.IsEnabled = true;
             }
             else
             {
                 _tcpClient.Close();
                 _tcpClient = null;
                 btnOpenClose.Content = "OPEN";
+                btnFileCmd.IsEnabled = false;
             }
         }
 
-        private async void BtnSend_Click(object sender, RoutedEventArgs e)
+        private async Task BtnSendAsync()
         {
-            if (btnSend.IsEnabled)
+            if (!btnSend.IsEnabled) return;
+            if (rbtnSerial.IsChecked == true)
             {
-                if (rbtnSerial.IsChecked ?? false)
+                if (_serialPort.IsOpen)
                 {
-                    if (_serialPort.IsOpen)
+                    try
                     {
-                        try
-                        {
-                            _serialPort.WriteLine(txtCMD.Text);
-                            txtCMD.Text = string.Empty;
-                        }
-                        catch (TimeoutException te)
-                        {
-                            ScriviResponseBox(string.Format("TIMEOUT: {0}{1}", te.Message, Environment.NewLine));
-                        }
-                        catch (Exception ex)
-                        {
-                            ScriviResponseBox(string.Format("ERROR: {0}{1}", ex.Message, Environment.NewLine));
-                        }
+                        _serialPort.WriteLine(txtCMD.Text);
+                        txtCMD.Clear();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("La connessione con la porta risulta chiusa.", "Connesione Chiusa", MessageBoxButton.OK, MessageBoxImage.Error);
+                        ScriviResponseBox($"ERROR: {ex.Message}");
                     }
                 }
                 else
                 {
-                    try
+                    MessageBox.Show("La connessione con la porta risulta chiusa.", "Connessione Chiusa", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (_tcpClient?.Connected == true)
                     {
-                        if (_tcpClient?.Connected == true)
+                        byte[] buffer = Encoding.ASCII.GetBytes(txtCMD.Text);
+                        var stream = _tcpClient.GetStream();
+
+                        await SendCommandAsync(buffer, stream);
+                        var responseBuffer = await ReceiveResponseAsync(stream);
+
+                        if (responseBuffer.Length > 1)
                         {
-                            byte[] controlCode = new byte[2];
-                            byte[] buffer = Encoding.ASCII.GetBytes(txtCMD.Text);
-                            NetworkStream stream = _tcpClient.GetStream();
-                            await SendCommandAsync(buffer, stream);
+                            string controlCode = Encoding.ASCII.GetString(responseBuffer[^3..^1]);
 
-                            byte[] resposeBuffer = await ReceiveResponseAsync(stream);
-                            if (resposeBuffer.Length > 0)
+                            if (controlCode == NAK_CODE)
                             {
-                                // Supponiamo che gli ultimi 2 byte siano i codici di controllo
-                                controlCode[0] = resposeBuffer[^3];
-                                controlCode[1] = resposeBuffer[^2];
-
-                                string flusso = Encoding.ASCII.GetString(controlCode, 0, controlCode.Length);
-                                if (flusso == "14") // NAK
-                                {
-                                    ScriviResponseBox("Errore ricevuto (NAK), in attesa di riprovare...\n");
-                                    // Puoi decidere se vuoi reinviare il comando o gestire diversamente
-                                    // Aspetta un po' prima di ritentare
-                                    await Task.Delay(1000);
-                                    await SendCommandAsync(buffer, stream); // Ritenta l'invio
-                                }
-                                else if (flusso == "11") // Xon
-                                {
-                                    ScriviResponseBox("Via libera ricevuta (Xon), posso continuare.\n");
-                                }
-
-                                string response = Encoding.ASCII.GetString(resposeBuffer, 0, resposeBuffer.Length);
-                                ScriviResponseBox(response);
-                                ScriviResponseBox(Environment.NewLine);
+                                ScriviResponseBox("Errore ricevuto (NAK), in attesa di riprovare...\n");
+                                await Task.Delay(1000);
+                                await SendCommandAsync(buffer, stream);
                             }
-                            txtCMD.Text = string.Empty;
+                            else if (controlCode == XON_CODE)
+                            {
+                                ScriviResponseBox("Via libera ricevuta (Xon), posso continuare.\n");
+                            }
+
+                            ScriviResponseBox(Encoding.ASCII.GetString(responseBuffer));
                         }
+                        txtCMD.Clear();
                     }
-                    catch (Exception ex)
-                    {
-                        ScriviResponseBox(string.Format("ERROR: {0}{1}", ex.Message, Environment.NewLine));
-                    }
+                }
+                catch (Exception ex)
+                {
+                    ScriviResponseBox($"ERROR: {ex.Message}");
                 }
             }
         }
 
         private static async Task SendCommandAsync(byte[] buffer, NetworkStream stream)
         {
-            await stream.WriteAsync(buffer, 0, buffer.Length);
+            await stream.WriteAsync(buffer);
             await stream.FlushAsync();
         }
 
         private static async Task<byte[]> ReceiveResponseAsync(NetworkStream stream)
         {
-            byte[] buffer = new byte[256]; // Supponiamo che la risposta abbia massimo 256 byte
-            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-
-            // Restituisce solo la parte letta del buffer
-            return buffer.Take(bytesRead).ToArray();
+            byte[] buffer = new byte[256];
+            int bytesRead = await stream.ReadAsync(buffer);
+            return [.. buffer.Take(bytesRead)];
         }
 
         private void ScriviResponseBox(string riga)
         {
-            if (txtResponse.Text.Length > 5000) txtResponse.Text = string.Empty;
-            txtResponse.Text += riga;
-            txtResponse.SelectionStart = txtResponse.Text.Length;
+            if (txtResponse.Text.Length > 5000) txtResponse.Clear();
+            txtResponse.AppendText($"{riga}{Environment.NewLine}");
             txtResponse.ScrollToEnd();
         }
 
-        private void BtnFileCmd_Click(object sender, RoutedEventArgs e)
+        private async void BtnFileCmd_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new()
             {
@@ -245,41 +244,44 @@ namespace Check.SPort.View
 
             if (ofd.ShowDialog() == true)
             {
-                FileInfo fi = new(ofd.FileName);
-                StreamReader sr = new(fi.FullName);
-                try
+                txtResponse.Clear();
+                using var reader = new StreamReader(ofd.FileName);
+                while (reader.Peek() > 0)
                 {
-                    while (sr.Peek() > 0)
-                    {
-                        txtCMD.Text = sr.ReadLine();
-                        BtnSend_Click(sender, e);
-                    }
+                    txtCMD.Text = reader.ReadLine();
+                    await BtnSendAsync();
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    sr.Dispose();
-                    sr.Close();
-                    txtCMD.Text = string.Empty;
-                }
+                txtCMD.Clear();
             }
         }
 
         private void ControlloChangeRB_Click(object sender, RoutedEventArgs e)
         {
-            var rb = (RadioButton)sender;
-            if (rb is RadioButton rbSerial && rbSerial.Name == "rbtnSerial" && _tcpClient?.Connected == true)
+            if (sender is RadioButton rb)
             {
-                OpenCloseETH();
+                if (rb.Name == "rbtnSerial" && _tcpClient?.Connected == true)
+                {
+                    OpenCloseETH();
+                }
+                else if (rb.Name == "rbtnETH" && _serialPort.IsOpen)
+                {
+                    OpenCloseSerialPort();
+                }
             }
+        }
 
-            if (rb is RadioButton rbETH && rbETH.Name == "rbtnETH" && _serialPort.IsOpen)
-            {
-                OpenCloseSerialPort();
-            }
+        private void OnAppExit(object? sender, ExitEventArgs e)
+        {
+            if (_serialPort.IsOpen) _serialPort.Close();
+            _serialPort.Dispose();
+
+            _tcpClient?.Close();
+            _tcpClient?.Dispose();
+        }
+
+        private async void BtnSend_Click(object sender, RoutedEventArgs e)
+        {
+            await BtnSendAsync();
         }
     }
 }
