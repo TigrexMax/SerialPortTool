@@ -135,7 +135,7 @@
                     </md:HintAssist.Hint>
                 </ComboBox>
 
-                <ComboBox x:Name="cbxBaudRate" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
+                <ComboBox x:Name="cbxBaudRate" Style="{StaticResource CbxStyle}" Background="#FFEFB059" IsEditable="True">
                     <md:HintAssist.Hint>
                         <StackPanel>
                             <TextBlock Text="Baud Rate" Style="{StaticResource TxtHint}"  />
@@ -144,6 +144,8 @@
                     <ComboBoxItem Content="9600" IsSelected="True" />
                     <ComboBoxItem Content="14400" />
                     <ComboBoxItem Content="19200" />
+                    <ComboBoxItem Content="38400" />
+                    <ComboBoxItem Content="57600" />
                 </ComboBox>
 
                 <ComboBox Name="cbxParity" Style="{StaticResource CbxStyle}" Background="#FFEFB059">
