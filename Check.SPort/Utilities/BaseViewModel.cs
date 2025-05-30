@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Check.SPort.ViewModel
+namespace Check.SPort.Utilities
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

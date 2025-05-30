@@ -13,17 +13,186 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="White"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="Check Connection"
-        Height="450" Width="900"
-        MinHeight="450" MinWidth="900"
-        MaxHeight="450" MaxWidth="900"
-        WindowState="Normal"
-        WindowStartupLocation="CenterScreen">
+        Height="450" 
+        Width="900"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent">
+
+    <Window.DataContext>
+        <vm:NavigationVM />
+    </Window.DataContext>
 
     <Grid>
         
+        <!--// Window Border //-->
+        <Border Background="#212529" CornerRadius="20" />
+
+        <Grid>
+            
+            <!--// Base Grid //-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="725*" />
+            </Grid.ColumnDefinitions>
+
+            <!--// Navigation Panel //-->
+            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65">
+                <Border Background="#272B2F" CornerRadius="20,0,0,20" />
+
+                <StackPanel Height="350">
+                    <!--// Grid for the Menu Toggle Button //-->
+                    <Grid Height="90">
+                        <!--// Menu title test //-->
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   Margin="73,-20,0,0"
+                                   Text="M E N U"
+                                   Foreground="White"
+                                   FontSize="22"
+                                   Background="Transparent"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Style="{StaticResource font_style}">
+                            <TextBlock.Effect>
+                                <DropShadowEffect BlurRadius="10"
+                                                  ShadowDepth="1"
+                                                  Direction="-90"
+                                                  Color="White" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+
+                        <!--// Toggle Button //-->
+                        <ToggleButton x:Name="Tg_Btn"
+                                      Grid.Column="0"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Left"
+                                      Margin="18,-20,0,0"
+                                      Height="30"
+                                      Width="30"
+                                      BorderThickness="0"
+                                      Style="{StaticResource tb_style}">
+                            <ToggleButton.Triggers>
+                                <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                    <BeginStoryboard>
+                                        <Storyboard x:Name="HideStackPanel">
+                                            <DoubleAnimation Storyboard.TargetName="nav_pnl"
+                                                             Storyboard.TargetProperty="Width"
+                                                             BeginTime="0:0:0"
+                                                             From="175" To="65"
+                                                             Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                    <BeginStoryboard>
+                                        <Storyboard x:Name="ShowStackPanel">
+                                            <DoubleAnimation Storyboard.TargetName="nav_pnl"
+                                                             Storyboard.TargetProperty="Width"
+                                                             BeginTime="0:0:0"
+                                                             From="65" To="175"
+                                                             Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </ToggleButton.Triggers>
+                        </ToggleButton>
+                    </Grid>
+
+                    <!--// ListView with menu list item //-->
+                    <ListView x:Name="LV"
+                              Background="Transparent"
+                              BorderBrush="Transparent"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                        <!--// Home //-->
+                        <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding HomeCommand}">
+                                    <md:PackIcon Kind="Home" Padding="0" Foreground="Cyan" Height="35" Width="35" />
+                                </Button>
+                                <TextBlock Text="Home" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                            </StackPanel>
+                            <ListViewItem.ToolTip>
+                                <ToolTip x:Name="tt_home" Content="Home" Style="{StaticResource tt_style}" />
+                            </ListViewItem.ToolTip>
+                        </ListViewItem>
+
+                        <!--// Protocol XonXoff //-->
+                        <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding ProtocolXonXOffCommand}">
+                                    <md:PackIcon Kind="PrinterPos" Foreground="Wheat" Height="35" Width="35" />
+                                </Button>
+                                <TextBlock Text="Xon-Xoff" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                            </StackPanel>
+                            <ListViewItem.ToolTip>
+                                <ToolTip x:Name="tt_xonxoff" Content="Xon-Xoff" Style="{StaticResource tt_style}" />
+                            </ListViewItem.ToolTip>
+                        </ListViewItem>
+
+                        <!--// Protocol Custom //-->
+                        <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding ProtocolCustomCommand}">
+                                    <md:PackIcon Kind="PrinterPosNetwork" Foreground="Coral" Height="35" Width="35" />
+                                </Button>
+                                <TextBlock Text="Custom" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                            </StackPanel>
+                            <ListViewItem.ToolTip>
+                                <ToolTip x:Name="tt_custom" Content="Custom" Style="{StaticResource tt_style}" />
+                            </ListViewItem.ToolTip>
+                        </ListViewItem>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Border x:Name="Bd"
+                                                    Height="50"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Background="{TemplateBinding Background}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    SnapsToDevicePixels="True">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsMouseOver" Value="True" />
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Background" TargetName="Bd" Value="#404D5B" />
+                                                    <Setter Property="BorderBrush" TargetName="Bd" Value="#404D5B" />
+                                                </MultiTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+            
+            <!--// App Close Button //-->
+            <Grid Grid.Column="1">
+                
+                <ContentControl x:Name="Pages" Content="{Binding CurrentView}" />
+
+                <Button x:Name="CloseBtn" Grid.Column="1" Grid.Row="1" Width="50" Height="50" BorderThickness="1" Padding="0" Style="{StaticResource Close_btn}" Click="CloseBtn_Click">
+                    <Button.Content>
+                        <md:PackIcon Kind="Power" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" />
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

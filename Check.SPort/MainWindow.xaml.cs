@@ -23,7 +23,29 @@ namespace Check.SPort
         public MainWindow()
         {
             InitializeComponent();
-            Content = new MainView();
+        }
+
+        private void ListViewItem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            // Set tooltip visibility
+
+            if (Tg_Btn.IsChecked == true)
+            {
+                tt_home.Visibility = Visibility.Collapsed;
+                tt_xonxoff.Visibility = Visibility.Collapsed;
+                tt_custom.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                tt_home.Visibility = Visibility.Visible;
+                tt_xonxoff.Visibility = Visibility.Visible;
+                tt_custom.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
