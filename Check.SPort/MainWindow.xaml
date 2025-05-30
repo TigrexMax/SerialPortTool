@@ -5,15 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sm="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:Check.SPort" 
         xmlns:view="clr-namespace:Check.SPort.View"
         xmlns:vm="clr-namespace:Check.SPort.ViewModel"
-        TextElement.Foreground="{DynamicResource MaterialDesignLightForeground}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="Check Connection"
         Height="450" 
@@ -21,11 +14,8 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Background="Transparent">
-
-    <Window.DataContext>
-        <vm:NavigationVM />
-    </Window.DataContext>
+        Background="Transparent"
+        d:DataContext="{d:DesignInstance vm:NavigationVM}">
 
     <Grid>
         

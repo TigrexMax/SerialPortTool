@@ -9,12 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="725"
+             d:DataContext="{d:DesignInstance vm:ProtocolCustomVM}"
              Style="{StaticResource Page_Style}">
 
-    <UserControl.DataContext>
-        <vm:ProtocolCustomVM />
-    </UserControl.DataContext>
-    
     <Grid>
         <Border CornerRadius="0,20,20,0" />
     </Grid>

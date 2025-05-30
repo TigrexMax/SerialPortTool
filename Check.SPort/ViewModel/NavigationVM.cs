@@ -1,4 +1,5 @@
-﻿using Check.SPort.Utilities;
+﻿using Check.SPort.Models;
+using Check.SPort.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ namespace Check.SPort.ViewModel
     class NavigationVM : BaseViewModel
     {
         #region Property
-        private object? _currentView;
+        private IPageViewModel? _currentView;
         #endregion Property
 
         public NavigationVM()
@@ -21,16 +22,13 @@ namespace Check.SPort.ViewModel
         }
 
         #region Command
-        public ICommand HomeCommand => new RelayCommand(v => CurrentView = new MainViewModel());
-        public ICommand ProtocolCustomCommand => new RelayCommand(v => CurrentView = new ProtocolCustomVM());
-        public ICommand ProtocolXonXOffCommand => new RelayCommand(v => CurrentView = new ProtocolXonXoffVM());
+        public ICommand HomeCommand => new RelayCommand(_ => CurrentView = new MainViewModel());
+        public ICommand ProtocolCustomCommand => new RelayCommand(_ => CurrentView = new ProtocolCustomVM());
+        public ICommand ProtocolXonXOffCommand => new RelayCommand(_ => CurrentView = new ProtocolXonXoffVM());
         #endregion Command
 
-        #region Metodi
-        #endregion Metodi
-
         #region Binding
-        public object? CurrentView
+        public IPageViewModel? CurrentView
         {
             get => _currentView;
             set
