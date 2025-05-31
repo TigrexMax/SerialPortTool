@@ -13,32 +13,36 @@ namespace Check.SPort.ViewModel
     class NavigationVM : BaseViewModel
     {
         #region Property
-        private IPageViewModel? _currentView;
+        private object _currentView;
         #endregion Property
 
         public NavigationVM()
         {
-            CurrentView = new MainViewModel();
+            HomeCommand = new RelayCommand(Home);
+            ProtocolCustomCommand = new RelayCommand(Custom);
+            ProtocolXonXOffCommand = new RelayCommand(XonXoff);
+
+            // Startup Page
+            CurrentViewModel = new MainViewModel();
         }
 
         #region Command
-        public ICommand HomeCommand => new RelayCommand(_ => CurrentView = new MainViewModel());
-        public ICommand ProtocolCustomCommand => new RelayCommand(_ => CurrentView = new ProtocolCustomVM());
-        public ICommand ProtocolXonXOffCommand => new RelayCommand(_ => CurrentView = new ProtocolXonXoffVM());
+        public ICommand HomeCommand { get; set; }
+        public ICommand ProtocolCustomCommand { get; }
+        public ICommand ProtocolXonXOffCommand { get; }
         #endregion Command
 
+        #region Metodi
+        private void Home(object obj) => CurrentViewModel = new MainViewModel();
+        private void XonXoff(object obj) => CurrentViewModel = new ProtocolXonXoffVM();
+        private void Custom(object obj) => CurrentViewModel = new ProtocolCustomVM();
+        #endregion Metodi
+
         #region Binding
-        public IPageViewModel? CurrentView
+        public object CurrentViewModel
         {
             get => _currentView;
-            set
-            {
-                if (_currentView != value)
-                {
-                    _currentView = value;
-                    OnPropertyChanged(nameof(CurrentView));
-                }
-            }
+            set { _currentView = value; OnPropertyChanged(nameof(CurrentViewModel)); }
         }
         #endregion Binding
     }

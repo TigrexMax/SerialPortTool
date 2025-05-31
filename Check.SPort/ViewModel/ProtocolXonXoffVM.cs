@@ -12,7 +12,7 @@ namespace Check.SPort.ViewModel
     class ProtocolXonXoffVM : BaseViewModel
     {
         #region Property
-        private SerialPortParams? _settingCassa;
+        private SerialPortParams _settingCassa;
         #endregion Property
 
         public ProtocolXonXoffVM()
@@ -27,7 +27,7 @@ namespace Check.SPort.ViewModel
         #endregion Metodi
 
         #region Binding
-        public SerialPortParams? SettingCassa
+        public SerialPortParams SettingCassa
         {
             get => _settingCassa;
             set { _settingCassa = value; OnPropertyChanged(nameof(SettingCassa)); }

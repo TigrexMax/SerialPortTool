@@ -28,7 +28,6 @@ namespace Check.SPort
         private void ListViewItem_MouseEnter(object sender, MouseEventArgs e)
         {
             // Set tooltip visibility
-
             if (Tg_Btn.IsChecked == true)
             {
                 tt_home.Visibility = Visibility.Collapsed;
@@ -43,7 +42,7 @@ namespace Check.SPort
             }
         }
 
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }

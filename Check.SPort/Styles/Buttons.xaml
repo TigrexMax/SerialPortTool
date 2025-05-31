@@ -2,11 +2,34 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <Style x:Key="Close_btn" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignPaperDarkButton}">
-        <Setter Property="md:ButtonAssist.CornerRadius" Value="25" />
-        <Setter Property="VerticalAlignment" Value="Top" />
+    <ImageBrush x:Key="close_app_def" ImageSource="/Resources/Image/shutdown_def.png" Stretch="None" />
+    <ImageBrush x:Key="close_app_mo" ImageSource="/Resources/Image/shutdown_mo.png" Stretch="None" />
+    
+    <Style x:Key="ExitApp" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="40" />
         <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="Margin" Value="0,7,7,0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="0,15,15,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
+                        <md:PackIcon x:Name="IconPower" Kind="Power" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconPower" Value="PowerCycle" />
+                            <Setter Property="Foreground" TargetName="IconPower" Value="Yellow" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconPower" Value="PowerOff" />
+                            <Setter Property="Foreground" TargetName="IconPower" Value="Red" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
@@ -31,5 +54,78 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style x:Key="BtnNaviStyle" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="12,0,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="BtnHomeStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderHome" BorderThickness="0" CornerRadius="5" Background="Transparent">
+                        <md:PackIcon Name="IconHome" Kind="Home" Foreground="Cyan" Height="35" Width="35" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconHome" Value="HomeFind" />
+                            <Setter Property="Foreground" TargetName="IconHome" Value="LightCyan" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconHome" Value="HomeFindOutline" />
+                            <Setter Property="Foreground" TargetName="IconHome" Value="DarkCyan" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnXonXoffStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderXonXoff" BorderThickness="0" CornerRadius="25" Background="Transparent">
+                        <md:PackIcon Name="IconXonXoff" Kind="PrinterPos" Foreground="Goldenrod" Height="35" Width="35" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconXonXoff" Value="PrinterPosCheck" />
+                            <Setter Property="Foreground" TargetName="IconXonXoff" Value="LightGoldenrodYellow" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconXonXoff" Value="PrinterPosOutline" />
+                            <Setter Property="Foreground" TargetName="IconXonXoff" Value="DarkGoldenrod" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnCustomStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderCustom" BorderThickness="0" CornerRadius="25" Background="Transparent">
+                        <md:PackIcon Name="IconCustom" Kind="PrinterPosNetwork" Foreground="Tomato" Height="35" Width="35" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosCheck" />
+                            <Setter Property="Foreground" TargetName="IconCustom" Value="Ivory" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosNetworkOutline" />
+                            <Setter Property="Foreground" TargetName="IconCustom" Value="Coral" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

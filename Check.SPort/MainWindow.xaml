@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sm="clr-namespace:System;assembly=mscorlib"
-        xmlns:view="clr-namespace:Check.SPort.View"
         xmlns:vm="clr-namespace:Check.SPort.ViewModel"
         mc:Ignorable="d"
+        FontFamily="Impact"
         Title="Check Connection"
         Height="450" 
         Width="900"
+        Icon="/Resources/Image/home_page.png"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -21,12 +22,10 @@
     </Window.DataContext>
 
     <Grid>
-        
         <!--// Window Border //-->
         <Border Background="#212529" CornerRadius="20" />
 
         <Grid>
-            
             <!--// Base Grid //-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -40,24 +39,18 @@
                 <StackPanel Height="350">
                     <!--// Grid for the Menu Toggle Button //-->
                     <Grid Height="90">
+
                         <!--// Menu title test //-->
+
                         <TextBlock Grid.Row="1"
                                    Grid.Column="0"
                                    Margin="73,-20,0,0"
                                    Text="M E N U"
                                    Foreground="White"
                                    FontSize="22"
-                                   Background="Transparent"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
-                                   Style="{StaticResource font_style}">
-                            <TextBlock.Effect>
-                                <DropShadowEffect BlurRadius="10"
-                                                  ShadowDepth="1"
-                                                  Direction="-90"
-                                                  Color="White" />
-                            </TextBlock.Effect>
-                        </TextBlock>
+                                   Style="{StaticResource font_style}" />
 
                         <!--// Toggle Button //-->
                         <ToggleButton x:Name="Tg_Btn"
@@ -105,9 +98,7 @@
                         <!--// Home //-->
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding HomeCommand}">
-                                    <md:PackIcon Kind="Home" Padding="0" Foreground="Cyan" Height="35" Width="35" />
-                                </Button>
+                                <Button Command="{Binding HomeCommand}" Style="{StaticResource BtnHomeStyle}" />
                                 <TextBlock Text="Home" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
@@ -118,9 +109,7 @@
                         <!--// Protocol XonXoff //-->
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding ProtocolXonXOffCommand}">
-                                    <md:PackIcon Kind="PrinterPos" Foreground="Wheat" Height="35" Width="35" />
-                                </Button>
+                                <Button Command="{Binding ProtocolXonXOffCommand}" Style="{StaticResource BtnXonXoffStyle}" />
                                 <TextBlock Text="Xon-Xoff" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
@@ -131,9 +120,7 @@
                         <!--// Protocol Custom //-->
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Margin="12,0,0,0" Padding="0" Command="{Binding ProtocolCustomCommand}">
-                                    <md:PackIcon Kind="PrinterPosNetwork" Foreground="Coral" Height="35" Width="35" />
-                                </Button>
+                                <Button Command="{Binding ProtocolCustomCommand}" Style="{StaticResource BtnCustomStyle}" />
                                 <TextBlock Text="Custom" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
@@ -154,8 +141,8 @@
                                                     Padding="{TemplateBinding Padding}"
                                                     SnapsToDevicePixels="True">
                                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <MultiTrigger>
@@ -174,18 +161,16 @@
                     </ListView>
                 </StackPanel>
             </Grid>
-            
-            <!--// App Close Button //-->
-            <Grid Grid.Column="1">
-                
-                <ContentControl x:Name="Pages" Content="{Binding CurrentView}" />
 
-                <Button x:Name="CloseBtn" Grid.Column="1" Grid.Row="1" Width="50" Height="50" BorderThickness="1" Padding="0" Style="{StaticResource Close_btn}" Click="CloseBtn_Click">
-                    <Button.Content>
-                        <md:PackIcon Kind="Power" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" />
-                    </Button.Content>
-                </Button>
+            <Grid Grid.Column="1">
+
+                <ContentControl Content="{Binding CurrentViewModel}" />
+
             </Grid>
         </Grid>
+
+        <Button x:Name="CloseApp" Style="{StaticResource ExitApp}" Click="CloseApp_Click" />
+
     </Grid>
+
 </Window>

@@ -5,14 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Check.SPort.View"
              xmlns:vm="clr-namespace:Check.SPort.ViewModel"
-             Background="{StaticResource MaterialDesignDarkBackground}"
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="725"
-             d:DataContext="{d:DesignInstance vm:ProtocolCustomVM}"
              Style="{StaticResource Page_Style}">
 
-    <Grid>
-        <Border CornerRadius="0,20,20,0" />
+    <UserControl.DataContext>
+        <vm:ProtocolCustomVM />
+    </UserControl.DataContext>
+
+    <Grid Margin="9">
+        <Border CornerRadius="0,20,20,0" Background="{StaticResource MaterialDesignDarkBackground}" />
     </Grid>
 </UserControl>
