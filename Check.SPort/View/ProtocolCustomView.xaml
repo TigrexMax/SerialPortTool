@@ -15,6 +15,6 @@
     </UserControl.DataContext>
 
     <Grid Margin="9">
-        <Border CornerRadius="0,20,20,0" Background="{StaticResource MaterialDesignDarkBackground}" />
+        <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}" />
     </Grid>
 </UserControl>

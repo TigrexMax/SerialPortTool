@@ -2,20 +2,62 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <ImageBrush x:Key="close_app_def" ImageSource="/Resources/Image/shutdown_def.png" Stretch="None" />
-    <ImageBrush x:Key="close_app_mo" ImageSource="/Resources/Image/shutdown_mo.png" Stretch="None" />
-    
-    <Style x:Key="ExitApp" TargetType="{x:Type Button}">
+    <Style x:Key="MiniAppStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="40" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Margin" Value="0,15,15,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
-                        <md:PackIcon x:Name="IconPower" Kind="Power" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                        <md:PackIcon x:Name="IconMinemize" Kind="WindowMinimize" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
+                            <Setter Property="Foreground" TargetName="IconMinemize" Value="Yellow" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
+                            <Setter Property="Foreground" TargetName="IconMinemize" Value="Green" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="MaxAppStyle" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
+                        <md:PackIcon x:Name="IconMaximize" Kind="WindowMaximize" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
+                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Yellow" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
+                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Orange" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ExitApp" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
+                        <md:PackIcon x:Name="IconPower" Kind="Power" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -23,7 +65,7 @@
                             <Setter Property="Foreground" TargetName="IconPower" Value="Yellow" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Kind" TargetName="IconPower" Value="PowerOff" />
+                            <Setter Property="Kind" TargetName="IconPower" Value="WindowClose" />
                             <Setter Property="Foreground" TargetName="IconPower" Value="Red" />
                         </Trigger>
                     </ControlTemplate.Triggers>

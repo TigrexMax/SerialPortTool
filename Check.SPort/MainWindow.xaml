@@ -6,16 +6,19 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sm="clr-namespace:System;assembly=mscorlib"
         xmlns:vm="clr-namespace:Check.SPort.ViewModel"
+        xmlns:helper="clr-namespace:Check.SPort.Helper"
         mc:Ignorable="d"
         FontFamily="Impact"
-        Title="Check Connection"
-        Height="450" 
-        Width="900"
+        Title="P R O T O C O L - C O N N E C T I O N"
+        Height="450" Width="900"
+        MinHeight="450" MinWidth="900"
         Icon="/Resources/Image/home_page.png"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Background="Transparent">
+        ResizeMode="CanResizeWithGrip"
+        Background="Transparent"
+        x:Name="ResponsiveWindow">
 
     <Window.DataContext>
         <vm:NavigationVM />
@@ -23,7 +26,7 @@
 
     <Grid>
         <!--// Window Border //-->
-        <Border Background="#212529" CornerRadius="20" />
+        <Border Background="#212529" CornerRadius="20,00,0,20" BorderThickness="5" BorderBrush="#3A4149" />
 
         <Grid>
             <!--// Base Grid //-->
@@ -169,7 +172,41 @@
             </Grid>
         </Grid>
 
-        <Button x:Name="CloseApp" Style="{StaticResource ExitApp}" Click="CloseApp_Click" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5" />
+                <RowDefinition Height="55" />
+                <RowDefinition Height="5" />
+            </Grid.RowDefinitions>
+
+            <Border x:Name="BorderMove"
+                    Grid.Column="0" Grid.Row="1"
+                    Background="#FF3A4149"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Height="25" Width="250"
+                    CornerRadius="0,0,20,20"
+                    Margin="180,0,0,0"
+                    MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
+                <TextBlock Text="{Binding Title, ElementName=ResponsiveWindow}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFCCCCCC" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="12">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2" ShadowDepth="0" Color="Black" Opacity="0.6"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Border>
+
+            <Button Grid.Column="1" Grid.Row="1" x:Name="MinApp" Style="{StaticResource MiniAppStyle}" Command="{Binding MiniAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
+            <Button Grid.Column="2" Grid.Row="1" x:Name="MaxApp" Style="{StaticResource MaxAppStyle}" Command="{Binding MaxAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
+            <Button Grid.Column="3" Grid.Row="1" x:Name="CloseApp" Style="{StaticResource ExitApp}" Command="{Binding CloseAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}"/>
+        </Grid>
 
     </Grid>
 

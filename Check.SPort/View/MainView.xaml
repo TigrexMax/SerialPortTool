@@ -14,9 +14,9 @@
     
     <Grid>
 
-        <Border CornerRadius="0,20,20,0" Margin="0,5,5,0">
+        <Border CornerRadius="0,0,20,0" Margin="0,5,5,0">
 
-            <Image Source="/Resources/Image/home_page.png" Stretch="Fill" Width="725" />
+            <Image Source="/Resources/Image/home_page.png" Stretch="Fill" MinWidth="725" />
 
         </Border>
 
