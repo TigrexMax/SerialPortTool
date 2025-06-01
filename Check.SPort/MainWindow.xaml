@@ -12,7 +12,6 @@
         Title="P R O T O C O L - C O N N E C T I O N"
         Height="450" Width="900"
         MinHeight="450" MinWidth="900"
-        Icon="/Resources/Image/home_page.png"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
