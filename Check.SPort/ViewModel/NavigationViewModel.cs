@@ -11,26 +11,26 @@ using System.Windows.Input;
 
 namespace Check.SPort.ViewModel
 {
-    class NavigationVM : BaseViewModel
+    class NavigationViewModel : BaseViewModel
     {
         #region Property
         private object _currentView;
         #endregion Property
 
-        public NavigationVM()
+        public NavigationViewModel()
         {
             HomeCommand = new RelayCommand(Home);
-            ProtocolCustomCommand = new RelayCommand(Custom);
-            ProtocolXonXOffCommand = new RelayCommand(XonXoff);
+            SettingsCommand = new RelayCommand(Custom);
+            ComunicazioneCommand = new RelayCommand(XonXoff);
 
             // Startup Page
-            CurrentViewModel = new MainViewModel();
+            CurrentViewModel = new HomeViewModel();
         }
 
         #region Command
         public ICommand HomeCommand { get; set; }
-        public ICommand ProtocolCustomCommand { get; }
-        public ICommand ProtocolXonXOffCommand { get; }
+        public ICommand SettingsCommand { get; }
+        public ICommand ComunicazioneCommand { get; }
         public ICommand CloseAppCommand => new RelayCommand(CloseApp);
         public ICommand MaxAppCommand => new RelayCommand(MaxApp);
         public ICommand MiniAppCommand => new RelayCommand(MiniApp);
@@ -65,9 +65,9 @@ namespace Check.SPort.ViewModel
             win.WindowState = WindowState.Minimized;
         }
 
-        private void Home(object obj) => CurrentViewModel = new MainViewModel();
-        private void XonXoff(object obj) => CurrentViewModel = new ProtocolXonXoffVM();
-        private void Custom(object obj) => CurrentViewModel = new ProtocolCustomVM();
+        private void Home(object obj) => CurrentViewModel = new HomeViewModel();
+        private void XonXoff(object obj) => CurrentViewModel = new ComunicazioneViewModel();
+        private void Custom(object obj) => CurrentViewModel = new SettingsViewModel();
         #endregion Metodi
 
         #region Binding

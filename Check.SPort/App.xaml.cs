@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Check.SPort.Models;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,5 +10,6 @@ namespace Check.SPort
     /// </summary>
     public partial class App : Application
     {
+        public static ProtocolloComunicazione SettingsProtocol { get; } = new ProtocolloComunicazione();
     }
 }

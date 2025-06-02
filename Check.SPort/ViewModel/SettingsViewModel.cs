@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Check.SPort.ViewModel
 {
-    public class ProtocolCustomVM : BaseViewModel
+    public class SettingsViewModel : BaseViewModel
     {
         #region Property
         #endregion Property
 
-        public ProtocolCustomVM()
+        public SettingsViewModel()
         {
         }
 

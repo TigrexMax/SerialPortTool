@@ -1,11 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO.Ports;
-using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,11 +16,11 @@ using System.Windows.Shapes;
 namespace Check.SPort.View
 {
     /// <summary>
-    /// Logica di interazione per MainView.xaml
+    /// Logica di interazione per SettingsView.xaml
     /// </summary>
-    public partial class MainView : UserControl
+    public partial class SettingsView : UserControl
     {
-        public MainView()
+        public SettingsView()
         {
             InitializeComponent();
         }

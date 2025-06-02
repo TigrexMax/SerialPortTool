@@ -20,7 +20,7 @@
         x:Name="ResponsiveWindow">
 
     <Window.DataContext>
-        <vm:NavigationVM />
+        <vm:NavigationViewModel />
     </Window.DataContext>
 
     <Grid>
@@ -108,25 +108,25 @@
                             </ListViewItem.ToolTip>
                         </ListViewItem>
 
-                        <!--// Protocol XonXoff //-->
+                        <!--// Testing Protocol XonXoff o Custom //-->
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Command="{Binding ProtocolXonXOffCommand}" Style="{StaticResource BtnXonXoffStyle}" />
-                                <TextBlock Text="Xon-Xoff" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                                <Button Command="{Binding ComunicazioneCommand}" Style="{StaticResource BtnProtocolStyle}" />
+                                <TextBlock Text="Connction" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
-                                <ToolTip x:Name="tt_xonxoff" Content="Xon-Xoff" Style="{StaticResource tt_style}" />
+                                <ToolTip x:Name="tt_protocol" Content="Connction" Style="{StaticResource tt_style}" />
                             </ListViewItem.ToolTip>
                         </ListViewItem>
 
-                        <!--// Protocol Custom //-->
+                        <!--// Protocol Settings //-->
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
-                                <Button Command="{Binding ProtocolCustomCommand}" Style="{StaticResource BtnCustomStyle}" />
-                                <TextBlock Text="Custom" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                                <Button Command="{Binding SettingsCommand}" Style="{StaticResource BtnSettingsStyle}" />
+                                <TextBlock Text="Settings" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
-                                <ToolTip x:Name="tt_custom" Content="Custom" Style="{StaticResource tt_style}" />
+                                <ToolTip x:Name="tt_settings" Content="Settings" Style="{StaticResource tt_style}" />
                             </ListViewItem.ToolTip>
                         </ListViewItem>
 

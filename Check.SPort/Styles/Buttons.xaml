@@ -25,31 +25,45 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="MaxAppStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="40" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
-                        <md:PackIcon x:Name="IconMaximize" Kind="WindowMaximize" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" Background="#272B2F">
+
+                        <md:PackIcon x:Name="IconMaximize" Kind="WindowMaximize"
+                                     Width="25" Height="25"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="White" />
                     </Border>
+
                     <ControlTemplate.Triggers>
+                        <!-- Cambia colore all'hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
-                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Yellow" />
+                            <Setter TargetName="IconMaximize" Property="Foreground" Value="Yellow"/>
                         </Trigger>
+                        <!-- Cambia colore alla pressione -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
-                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Orange" />
+                            <Setter TargetName="IconMaximize" Property="Foreground" Value="Orange"/>
                         </Trigger>
+
+                        <!-- Cambia icona in base allo stato della finestra -->
+                        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                            <Setter TargetName="IconMaximize" Property="Kind" Value="WindowRestore"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Normal">
+                            <Setter TargetName="IconMaximize" Property="Kind" Value="WindowMaximize"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="ExitApp" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="40" />
@@ -127,7 +141,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BtnXonXoffStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+    <Style x:Key="BtnProtocolStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -149,21 +163,21 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BtnCustomStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+    <Style x:Key="BtnSettingsStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="BorderCustom" BorderThickness="0" CornerRadius="25" Background="Transparent">
-                        <md:PackIcon Name="IconCustom" Kind="PrinterPosNetwork" Foreground="Tomato" Height="35" Width="35" />
+                    <Border x:Name="BorderSetting" BorderThickness="0" CornerRadius="25" Background="Transparent">
+                        <md:PackIcon Name="IconSettings" Kind="Settings" Foreground="Tomato" Height="35" Width="35" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosCheck" />
-                            <Setter Property="Foreground" TargetName="IconCustom" Value="Ivory" />
+                            <Setter Property="Kind" TargetName="IconSettings" Value="Settings" />
+                            <Setter Property="Foreground" TargetName="IconSettings" Value="Ivory" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosNetworkOutline" />
-                            <Setter Property="Foreground" TargetName="IconCustom" Value="Coral" />
+                            <Setter Property="Kind" TargetName="IconSettings" Value="SettingsOutline" />
+                            <Setter Property="Foreground" TargetName="IconSettings" Value="Coral" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

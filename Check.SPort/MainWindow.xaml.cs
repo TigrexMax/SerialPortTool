@@ -15,6 +15,8 @@ using System.Linq;
 using Microsoft.Win32;
 using System.IO;
 using Check.SPort.View;
+using WF_Control = System.Windows.Forms.Control;
+using WF_Screen = System.Windows.Forms.Screen;
 
 namespace Check.SPort
 {
@@ -31,14 +33,14 @@ namespace Check.SPort
             if (Tg_Btn.IsChecked == true)
             {
                 tt_home.Visibility = Visibility.Collapsed;
-                tt_xonxoff.Visibility = Visibility.Collapsed;
-                tt_custom.Visibility = Visibility.Collapsed;
+                tt_protocol.Visibility = Visibility.Collapsed;
+                tt_settings.Visibility = Visibility.Collapsed;
             }
             else
             {
                 tt_home.Visibility = Visibility.Visible;
-                tt_xonxoff.Visibility = Visibility.Visible;
-                tt_custom.Visibility = Visibility.Visible;
+                tt_protocol.Visibility = Visibility.Visible;
+                tt_settings.Visibility = Visibility.Visible;
             }
         }
 
@@ -49,8 +51,38 @@ namespace Check.SPort
 
         private void BorderMove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
-                this.DragMove();
+            if (e.ClickCount == 2)
+            {
+                ResponsiveWindow.WindowState = ResponsiveWindow.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+                return;
+            }
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // Ottieni posizione assoluta del cursore
+                var mousePosition = WF_Control.MousePosition;
+
+                if (ResponsiveWindow.WindowState == WindowState.Maximized)
+                {
+                    // Rileva lo schermo dove si trova il cursore
+                    var currentScreen = WF_Screen.FromPoint(mousePosition);
+
+                    // Calcola offset del mouse rispetto allo schermo corrente
+                    double percentX = (double)(mousePosition.X - currentScreen.Bounds.X) / currentScreen.WorkingArea.Width;
+
+                    // Ripristina finestra
+                    ResponsiveWindow.WindowState = WindowState.Normal;
+
+                    // Calcola nuova posizione
+                    double targetLeft = mousePosition.X - (ResponsiveWindow.ActualWidth * percentX);
+                    double targetTop = mousePosition.Y - 10;
+
+                    // Applica nuova posizione
+                    ResponsiveWindow.Left = targetLeft;
+                    ResponsiveWindow.Top = targetTop;
+                }
+                ResponsiveWindow.DragMove();
+            }
         }
     }
 }

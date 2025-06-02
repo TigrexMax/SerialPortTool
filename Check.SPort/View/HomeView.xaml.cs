@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO.Ports;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,11 +21,11 @@ using System.Windows.Shapes;
 namespace Check.SPort.View
 {
     /// <summary>
-    /// Logica di interazione per ProtocolCustomView.xaml
+    /// Logica di interazione per HomeView.xaml
     /// </summary>
-    public partial class ProtocolCustomView : UserControl
+    public partial class HomeView : UserControl
     {
-        public ProtocolCustomView()
+        public HomeView()
         {
             InitializeComponent();
         }

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Check.SPort.ViewModel
 {
-    class ProtocolXonXoffVM : BaseViewModel
+    class ComunicazioneViewModel : BaseViewModel
     {
         #region Property
         private SerialPortParams _settingCassa;
         #endregion Property
 
-        public ProtocolXonXoffVM()
+        public ComunicazioneViewModel()
         {
             SettingCassa = new();
         }
