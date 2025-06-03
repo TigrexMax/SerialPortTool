@@ -2,12 +2,28 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <Style x:Key="FilledComboBox" TargetType="{x:Type ComboBox}">
+    <Style x:Key="FilledComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
         <Setter Property="FontSize" Value="13" />
+        <Setter Property="Height" Value="55" />
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF8054D0" Offset="0.821"/>
+                    <GradientStop Color="#FF5651EA" Offset="0"/>
+                    <GradientStop Color="#FF31C3C7" Offset="0.173"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FilledComboBox_2" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
         <Setter Property="Height" Value="50" />
-        <Setter Property="Width" Value="125" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="md:TextFieldAssist.HasFilledTextField" Value="True" />
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="md:HintAssist.Foreground" Value="AliceBlue" />
     </Style>
 
 </ResourceDictionary>

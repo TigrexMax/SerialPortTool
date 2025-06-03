@@ -49,6 +49,14 @@ namespace Check.SPort.ViewModel
         #region Metodi
         private void SaveSetting(object sender)
         {
+            if (SettingReg.IsSeriale)
+            {
+
+            }
+            else
+            {
+                
+            }
         }
 
         private void RefreshSettingsCassa(object sender)

@@ -11,7 +11,7 @@
         FontFamily="Impact"
         Title="P R O T O C O L - C O N N E C T I O N"
         Height="450" Width="900"
-        MinHeight="300" MinWidth="700"
+        MinHeight="300" MinWidth="850"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"

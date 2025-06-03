@@ -184,4 +184,72 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="BtnRefreshSetting_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="90" />
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn1" TargetType="{x:Type Button}">
+                    <Border Background="White" BorderThickness="1" BorderBrush="DarkOrange" CornerRadius="5">
+                        <ContentPresenter>
+                            <ContentPresenter.Content>
+                                <DockPanel HorizontalAlignment="Center">
+                                    <md:PackIcon Kind="Refresh" VerticalAlignment="Center" />
+                                    <TextBlock Text="Refesh" VerticalAlignment="Center" Margin="5,0" />
+                                </DockPanel>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnSaveSetting_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="90" />
+        <Setter Property="Margin" Value="5,0,15,0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn2" TargetType="{x:Type Button}">
+                    <Border x:Name="Bord" Background="White" BorderThickness="1" BorderBrush="DarkOrange" CornerRadius="5">
+                        <ContentPresenter x:Name="BtnSavePresenter">
+                            <ContentPresenter.Content>
+                                <DockPanel HorizontalAlignment="Center">
+                                    <md:PackIcon Kind="ContentSave" VerticalAlignment="Center" />
+                                    <TextBlock Text="Salva" VerticalAlignment="Center" Margin="5,0" />
+                                </DockPanel>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bord" Property="Background" Value="LightCyan" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnSearchCOM_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn3" TargetType="{x:Type Button}">
+                    <Border x:Name="Bord" Background="Goldenrod" BorderBrush="Black" BorderThickness="1.5" CornerRadius="3">
+                        <DockPanel HorizontalAlignment="Center">
+                            <md:PackIcon Kind="Search" VerticalAlignment="Center" Margin="3,0" />
+                            <TextBlock Text="Cerca-COM" VerticalAlignment="Center" FontSize="13" FontFamily="Tw Cen MT Condensed Extra Bold" />
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

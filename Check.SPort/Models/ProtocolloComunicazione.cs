@@ -15,7 +15,7 @@ namespace Check.SPort.Models
 {
     public class ProtocolloComunicazione : INotifyPropertyChanged
     {
-        private string _protocol = "Custom";
+        private string _protocol;
         private bool _isSeriale;
         private bool _isEthernet = true;
 
@@ -73,6 +73,8 @@ namespace Check.SPort.Models
                 EncodingType = EncodingTypeEnum.Standard,
                 LogLevel = LogLevelEnum.None
             };
+
+            Protocollo = "Custom";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
