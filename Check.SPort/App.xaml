@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="/Styles/Buttons.xaml" />
                 <ResourceDictionary Source="/Styles/Pages.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxs.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">

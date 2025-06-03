@@ -11,11 +11,11 @@
              d:DesignWidth="725"
              Style="{StaticResource Page_Style}">
     
-    <Grid>
+    <Grid Margin="9">
 
-        <Border CornerRadius="0,0,20,0" Margin="0,5,5,0">
+        <Border CornerRadius="0,0,20,0">
 
-            <Image Source="/Resources/Image/home_sfondo_2.png" Stretch="Fill" MinWidth="725" />
+            <Image Source="/Resources/Image/home_sfondo_2.png" Stretch="Fill" MinHeight="300" MinWidth="700" />
 
         </Border>
 

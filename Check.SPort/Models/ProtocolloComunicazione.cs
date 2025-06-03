@@ -60,10 +60,10 @@ namespace Check.SPort.Models
                 Parity = SerialPortSettings.Parity,
                 StopBits = SerialPortSettings.StopBits,
                 DataBits = SerialPortSettings.DataBits,
-                PortName = SerialPortSettings.PortName,
                 Handshake = SerialPortSettings.HandshakeProp,
                 DtrEnable = SerialPortSettings.Dtr,
-                RtsEnable = SerialPortSettings.Rts
+                RtsEnable = SerialPortSettings.Rts,
+                PortName = "COM3"
             };
 
             // Initialize Protocollo Custom - Seriale o Ethernet

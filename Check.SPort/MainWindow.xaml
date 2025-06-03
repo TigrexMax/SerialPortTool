@@ -11,7 +11,7 @@
         FontFamily="Impact"
         Title="P R O T O C O L - C O N N E C T I O N"
         Height="450" Width="900"
-        MinHeight="450" MinWidth="900"
+        MinHeight="300" MinWidth="700"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -35,31 +35,24 @@
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
-            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65">
+            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65" MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
                 <Border Background="#272B2F" CornerRadius="20,0,0,20" />
 
-                <StackPanel Height="350">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90*" />
+                        <RowDefinition Height="200*" />
+                    </Grid.RowDefinitions>
+                    
                     <!--// Grid for the Menu Toggle Button //-->
-                    <Grid Height="90">
-
-                        <!--// Menu title test //-->
-
-                        <TextBlock Grid.Row="1"
-                                   Grid.Column="0"
-                                   Margin="73,-20,0,0"
-                                   Text="M E N U"
-                                   Foreground="White"
-                                   FontSize="22"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"
-                                   Style="{StaticResource font_style}" />
+                    <DockPanel>
 
                         <!--// Toggle Button //-->
                         <ToggleButton x:Name="Tg_Btn"
-                                      Grid.Column="0"
-                                      VerticalAlignment="Top"
+                                      VerticalAlignment="Center"
                                       HorizontalAlignment="Left"
-                                      Margin="18,-20,0,0"
+                                      Margin="20,0,0,0"
                                       Height="30"
                                       Width="30"
                                       BorderThickness="0"
@@ -89,10 +82,19 @@
                                 </EventTrigger>
                             </ToggleButton.Triggers>
                         </ToggleButton>
-                    </Grid>
+
+                        <!--// Menu title test //-->
+                        <TextBlock Margin="25,0,0,0"
+                                   Text="M E N U"
+                                   Foreground="White"
+                                   FontSize="22"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
 
                     <!--// ListView with menu list item //-->
                     <ListView x:Name="LV"
+                              Grid.Row="1"
                               Background="Transparent"
                               BorderBrush="Transparent"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -161,7 +163,7 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
-                </StackPanel>
+                </Grid>
             </Grid>
 
             <Grid Grid.Column="1">

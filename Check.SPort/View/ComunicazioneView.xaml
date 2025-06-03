@@ -18,5 +18,11 @@
 
     <Grid Margin="9">
         <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}" />
+
+        <Grid>
+            
+        </Grid>
+        
     </Grid>
+    
 </UserControl>
