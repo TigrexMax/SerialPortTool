@@ -10,8 +10,8 @@
         mc:Ignorable="d"
         FontFamily="Impact"
         Title="P R O T O C O L - C O N N E C T I O N"
-        Height="450" Width="900"
-        MinHeight="300" MinWidth="850"
+        Height="390" Width="900"
+        MinHeight="390" MinWidth="900"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -114,10 +114,10 @@
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15" MouseEnter="ListViewItem_MouseEnter">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <Button Command="{Binding ComunicazioneCommand}" Style="{StaticResource BtnProtocolStyle}" />
-                                <TextBlock Text="Connction" Margin="25,0,0,0" Style="{StaticResource font_style}" />
+                                <TextBlock Text="Connection" Margin="25,0,0,0" Style="{StaticResource font_style}" />
                             </StackPanel>
                             <ListViewItem.ToolTip>
-                                <ToolTip x:Name="tt_protocol" Content="Connction" Style="{StaticResource tt_style}" />
+                                <ToolTip x:Name="tt_protocol" Content="Connection" Style="{StaticResource tt_style}" />
                             </ListViewItem.ToolTip>
                         </ListViewItem>
 

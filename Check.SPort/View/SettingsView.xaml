@@ -10,7 +10,7 @@
              FontWeight="SemiBold"
              FontSize="15"
              mc:Ignorable="d" 
-             d:DesignHeight="300"
+             d:DesignHeight="350"
              d:DesignWidth="700"
              Style="{StaticResource Page_Style}">
 
@@ -34,7 +34,7 @@
                     <Grid Margin="5,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
-                            <RowDefinition Height="30" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -49,6 +49,7 @@
                                     <GradientStop Color="#FFA82ECE" Offset="0.091"/>
                                 </LinearGradientBrush>
                             </md:Card.Background>
+                            
                             <Grid Margin="10">
 
                                 <Grid.ColumnDefinitions>
@@ -104,16 +105,18 @@
                                           Height="30" 
                                           Grid.Row="3" 
                                           Grid.Column="0"
+                                          Margin="20,0,0,0"
                                           IsChecked="{Binding SettingReg.SerialPortSettings.Dtr}"
-                                          Style="{StaticResource MaterialDesignAccentCheckBox}" />
+                                          Style="{StaticResource MaterialDesignLightCheckBox}" />
 
                                 <CheckBox Content="Rtr Enable" 
                                           Width="auto" 
                                           Height="30" 
                                           Grid.Row="3"
                                           Grid.Column="1"
+                                          Margin="20,0,0,0"
                                           IsChecked="{Binding SettingReg.SerialPortSettings.Rts}"
-                                          Style="{StaticResource MaterialDesignAccentCheckBox}"/>
+                                          Style="{StaticResource MaterialDesignLightCheckBox}"/>
                             </Grid>
                         </md:Card>
 
@@ -156,11 +159,15 @@
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <RadioButton Content="Ethernet" GroupName="ConnType" IsChecked="{Binding SettingReg.IsEthernet}" />
+                                    <RadioButton Content="Ethernet" 
+                                                 GroupName="ConnType" 
+                                                 Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                                                 IsChecked="{Binding SettingReg.IsEthernet}" />
+                                    
                                     <TextBox x:Name="TxtIpAdress" Grid.Column="1" 
                                              Text="{Binding SettingReg.EthernetSettings.IpAddress}" 
                                              Style="{StaticResource IpAddressStyle}"
@@ -180,28 +187,31 @@
                                 </Grid>
 
                                 <ComboBox Grid.Row="2" 
-                                          Width="150"
-                                          Height="50"
-                                          Padding="12,0,10,0"
-                                          Background="WhiteSmoke"
-                                          BorderThickness="2"
-                                          BorderBrush="Black"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          SelectedValue="{Binding SettingReg.Protocollo}" 
-                                          Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                          SelectedValue="{Binding SettingReg.Protocollo}">
                                     <ComboBoxItem Content="Custom" IsSelected="True" />
                                     <ComboBoxItem Content="XonXoff" />
+
+                                    <ComboBox.Style>
+                                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
+                                            <Setter Property="Width" Value="150" />
+                                            <Setter Property="Height" Value="50" />
+                                            <Setter Property="Padding" Value="12,0,10,0" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="BorderThickness" Value="2" />
+                                            <Setter Property="BorderBrush" Value="Black" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="md:TextFieldAssist.TextFieldCornerRadius" Value="20" />
+                                        </Style>
+                                    </ComboBox.Style>
                                 </ComboBox>
                             </Grid>
                         </md:Card>
 
-                        <UniformGrid Rows="1" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
-                            <Button Command="{Binding RefreshSerialSettingsCommand}"
-                                        Style="{StaticResource BtnRefreshSetting_Style}" />
+                        <UniformGrid Rows="1" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0,10">
+                            <Button Command="{Binding RefreshSerialSettingsCommand}" Style="{StaticResource BtnRefreshSetting_Style}" />
 
-                            <Button Command="{Binding SaveCommand}" 
-                                        Style="{StaticResource BtnSaveSetting_Style}" />
+                            <Button Command="{Binding SaveCommand}" Style="{StaticResource BtnSaveSetting_Style}" />
                         </UniformGrid>
                     </Grid>
                 </Grid>

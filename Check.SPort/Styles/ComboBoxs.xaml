@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <Style x:Key="FilledComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+    <Style x:Key="FilledComboBox" TargetType="{x:Type ComboBox}">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Height" Value="55" />
         <Setter Property="Width" Value="auto" />
@@ -17,11 +17,19 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="md:HintAssist.IsFloating" Value="{StaticResource TrueValue}" />
+        <Setter Property="md:HintAssist.Foreground" Value="Black" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignComboBoxItemStyle}" />
+        <Setter Property="Template" Value="{StaticResource MaterialDesignFloatingHintComboBoxTemplate}" />
     </Style>
 
-    <Style x:Key="FilledComboBox_2" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
-        <Setter Property="Height" Value="50" />
+    <Style x:Key="FilledComboBox_2" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FilledComboBox}">
+        <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="auto" />
+        <Setter Property="Padding" Value="10,5,5,0" />
         <Setter Property="Margin" Value="2" />
         <Setter Property="md:HintAssist.Foreground" Value="AliceBlue" />
     </Style>
