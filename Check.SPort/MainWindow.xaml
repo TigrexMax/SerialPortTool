@@ -7,23 +7,96 @@
         xmlns:sm="clr-namespace:System;assembly=mscorlib"
         xmlns:vm="clr-namespace:Check.SPort.ViewModel"
         xmlns:helper="clr-namespace:Check.SPort.Helper"
+        xmlns:util="clr-namespace:Check.SPort.Utilities"
         mc:Ignorable="d"
         FontFamily="Impact"
         Title="P R O T O C O L - C O N N E C T I O N"
         Height="390" Width="900"
-        MinHeight="390" MinWidth="900"
+        MinHeight="390"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         Background="Transparent"
-        x:Name="ResponsiveWindow">
+        x:Name="ResponsiveWindow"
+        Opacity="0">
 
     <Window.DataContext>
         <vm:NavigationViewModel />
     </Window.DataContext>
 
+    <Window.RenderTransform>
+        <ScaleTransform x:Name="RootGridScale" ScaleX="1" ScaleY="1" />
+    </Window.RenderTransform>
+    
+    <Window.Resources>
+        <Storyboard x:Key="WindowEnterStoryboard" Completed="Storyboard_Completed">
+            <!-- Width -->
+            <DoubleAnimation
+                Storyboard.TargetName="ResponsiveWindow"
+                Storyboard.TargetProperty="Width"
+                From="90" To="900"
+                Duration="0:0:2"
+                AccelerationRatio="0.2"
+                DecelerationRatio="0.8" />
+
+            <!-- Opacità -->
+            <DoubleAnimation
+                Storyboard.TargetName="ResponsiveWindow"
+                Storyboard.TargetProperty="Opacity"
+                From="0" To="1"
+                Duration="0:0:2" />
+
+            <!-- Zoom leggero -->
+            <DoubleAnimation
+                Storyboard.TargetName="RootGridScale"
+                Storyboard.TargetProperty="ScaleX"
+                From="0.95" To="1"
+                Duration="0:0:2"
+                AccelerationRatio="0.2"
+                DecelerationRatio="0.8" />
+            <DoubleAnimation
+                Storyboard.TargetName="RootGridScale"
+                Storyboard.TargetProperty="ScaleY"
+                From="0.95" To="1"
+                Duration="0:0:2"
+                AccelerationRatio="0.2"
+                DecelerationRatio="0.8" />
+        </Storyboard>
+
+        <Storyboard x:Key="WindowExitStoryboard">
+            <!-- Shrink Width -->
+            <DoubleAnimation
+                Storyboard.TargetName="ResponsiveWindow"
+                Storyboard.TargetProperty="Width"
+                From="900" To="90"
+                Duration="0:0:1"
+                AccelerationRatio="0.8"
+                DecelerationRatio="0.2" />
+
+            <!-- Opacità -->
+            <DoubleAnimation
+                Storyboard.TargetName="ResponsiveWindow"
+                Storyboard.TargetProperty="Opacity"
+                From="1" To="0"
+                Duration="0:0:1" />
+
+            <!-- Zoom out -->
+            <DoubleAnimation
+                Storyboard.TargetName="RootGridScale"
+                Storyboard.TargetProperty="ScaleX"
+                From="1" To="0.95"
+                Duration="0:0:1" />
+            <DoubleAnimation
+                Storyboard.TargetName="RootGridScale"
+                Storyboard.TargetProperty="ScaleY"
+                From="1" To="0.95"
+                Duration="0:0:1" />
+        </Storyboard>
+    </Window.Resources>
+
     <Grid>
+        
         <!--// Window Border //-->
         <Border Background="#212529" CornerRadius="20,00,0,20" BorderThickness="5" BorderBrush="#3A4149" />
 
@@ -168,6 +241,17 @@
 
             <Grid Grid.Column="1">
 
+                <md:Snackbar x:Name="MainSnackbar"
+                             MessageQueue="{x:Static util:SnackbarService.SnackbarMessageQueue}"
+                             VerticalAlignment="Bottom"
+                             VerticalContentAlignment="Center"
+                             HorizontalAlignment="Left"
+                             HorizontalContentAlignment="Center"
+                             Panel.ZIndex="1"
+                             Margin="0"
+                             Background="#272B2F"
+                             Foreground="Goldenrod" />
+                
                 <ContentControl Content="{Binding CurrentViewModel}" />
 
             </Grid>

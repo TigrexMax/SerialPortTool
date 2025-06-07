@@ -1,5 +1,4 @@
-﻿using Check.SPort.Models;
-using Check.SPort.Utilities;
+﻿using Check.SPort.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace Check.SPort.ViewModel
 {
@@ -38,9 +38,19 @@ namespace Check.SPort.ViewModel
 
         #region Metodi
         // Close App
-        public void CloseApp(object obj)
+        public async void CloseApp(object obj)
         {
             MainWindow win = obj as MainWindow;
+            win.ResizeMode = ResizeMode.NoResize;
+            win.MinWidth = 90;
+
+            // Recupero lo storyboard della chiusura
+            Storyboard sb = (Storyboard)win.Resources["WindowExitStoryboard"];
+            if (sb != null)
+            {
+                sb.Begin(); // Avvia l'animazione
+                await Task.Delay(1000); // Attendi che finisca (deve corrispondere alla durata dell'animazione)
+            }
             win.Close();
         }
 

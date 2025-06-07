@@ -17,7 +17,7 @@ namespace Check.SPort.Models
     {
         private string _protocol;
         private bool _isSeriale;
-        private bool _isEthernet = true;
+        private bool _isEthernet;
 
         public SerialPortParams SerialPortSettings { get; } = new SerialPortParams();
         public EthernetParams EthernetSettings { get; } = new EthernetParams();
@@ -75,6 +75,8 @@ namespace Check.SPort.Models
             };
 
             Protocollo = "Custom";
+            IsSeriale = false;
+            IsEthernet = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

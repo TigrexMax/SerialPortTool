@@ -17,12 +17,80 @@
     </UserControl.DataContext>
 
     <Grid Margin="9">
-        <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}" />
+        <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}">
 
-        <Grid>
-            
-        </Grid>
-        
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding NameProtocol}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10,10,0,0" Foreground="DarkCyan" md:ElevationAssist.Elevation="Dp12" />
+                    <TextBlock Text="{Binding NameMode}" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="10,10,0,0" Foreground="DarkCyan" />
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="300*" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="BtnOpen"
+                                Grid.Column="0"
+                                Command="{Binding OpenCommand}"
+                                Height="40"
+                                Width="100"
+                                Margin="15"
+                                Background="Crimson"
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}">
+                            <Button.Content>
+                                <md:PackIcon Kind="Connection" />
+                            </Button.Content>
+                        </Button>
+
+                        <Grid Grid.Column="1">
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <TextBox x:Name="TxtCommandi"
+                                             Text="{Binding Comandi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="21"
+                                             FontFamily="OCR A Extended"
+                                             AcceptsReturn="True"
+                                             AcceptsTab="False"
+                                             TextWrapping="Wrap"
+                                             MinWidth="200"
+                                             MinHeight="150"
+                                             Padding="15,15,0,0"
+                                             VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch"
+                                             Background="WhiteSmoke"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>              
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <Button x:Name="BtnSend"
+                                Grid.Column="2"
+                                Command="{Binding SendCommand}"
+                                Style="{StaticResource SendButtonStyle}" />
+                    </Grid>
+                </Grid>
+            </Grid>
+
+        </Border>
     </Grid>
-    
+
 </UserControl>

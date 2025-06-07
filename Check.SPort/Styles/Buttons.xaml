@@ -88,21 +88,34 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
+    <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
         <Setter Property="Margin" Value="10" />
         <Setter Property="Width" Value="75" />
         <Setter Property="Height" Value="55" />
-        <Setter Property="BorderBrush" Value="Black" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="md:HintAssist.IsFloating" Value="False" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding Text.Length, ElementName=txtCMD}" Value="0">
-                <Setter Property="IsEnabled" Value="False"/>
-            </DataTrigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity" Value="1.0" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7" >
+                        <md:PackIcon x:Name="BtnSend" Kind="Send" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Turquoise" />
+                            <Setter Property="BorderBrush" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="FrameworkElement.Cursor" Value="No" />
+                            <Setter Property="UIElement.Opacity" Value="0.38" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="BtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">

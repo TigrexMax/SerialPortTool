@@ -10,6 +10,6 @@ namespace Check.SPort
     /// </summary>
     public partial class App : Application
     {
-        public static ProtocolloComunicazione SettingsProtocol { get; } = new ProtocolloComunicazione();
+        public static ProtocolloComunicazione SettingsProtocol { get; set; } = new ProtocolloComunicazione();
     }
 }
