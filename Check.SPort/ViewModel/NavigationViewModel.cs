@@ -40,6 +40,8 @@ namespace Check.SPort.ViewModel
         // Close App
         public async void CloseApp(object obj)
         {
+            DisposeConnection();
+
             MainWindow win = obj as MainWindow;
             win.ResizeMode = ResizeMode.NoResize;
             win.MinWidth = 90;
@@ -78,6 +80,12 @@ namespace Check.SPort.ViewModel
         private void Home(object obj) => CurrentViewModel = new HomeViewModel();
         private void XonXoff(object obj) => CurrentViewModel = new ComunicazioneViewModel();
         private void Custom(object obj) => CurrentViewModel = new SettingsViewModel();
+
+        private void DisposeConnection()
+        {
+            App.SettingsProtocol.SerialPort.Dispose();
+            App.SettingsProtocol.TcpClient.Dispose();
+        }
         #endregion Metodi
 
         #region Binding

@@ -13,6 +13,7 @@
         Title="P R O T O C O L - C O N N E C T I O N"
         Height="390" Width="900"
         MinHeight="390"
+        MaxWidth="1920" MaxHeight="1080"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"

@@ -1,9 +1,11 @@
 ﻿using Check.SPort.Models;
 using Check.SPort.Utilities;
 using Custom.CeFCom;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
@@ -11,6 +13,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Check.SPort.ViewModel
 {
@@ -20,7 +23,10 @@ namespace Check.SPort.ViewModel
         private const string NAK_CODE = "14";
         private const string XON_CODE = "11";
         private string _comandi;
+        private string _responseComandi;
         private bool _isConnection;
+        private bool _activeFlipper;
+        private int _badgeCount;
         #endregion Property
 
         public ComunicazioneViewModel()
@@ -48,8 +54,11 @@ namespace Check.SPort.ViewModel
         public ICommand OpenCommand => new RelayCommand(_ => IsConnection = OpenConnection());
         public ICommand CloseCommand => new RelayCommand(_ => CloseConnection());
         public ICommand SendCommand => new RelayCommand(async _ => await SendCommandForProtocolAsync(), _ => !string.IsNullOrEmpty(Comandi));
+        public ICommand FileCommand => new RelayCommand(_ => OpenFileForComandi(), _ => IsConnection);
+        public ICommand ActiveFlipperCommand => new RelayCommand(_ => ActiveFlipper = !ActiveFlipper);
         #endregion Command
 
+        #region Metodi
         bool OpenConnection()
         {
             var settings = App.SettingsProtocol;
@@ -126,6 +135,7 @@ namespace Check.SPort.ViewModel
         async Task SendCommandForProtocolAsync()
         {
             var settings = App.SettingsProtocol;
+            ResponseComandi = string.Empty;
             try
             {
                 if (settings.IsSeriale)
@@ -157,9 +167,56 @@ namespace Check.SPort.ViewModel
             }
             catch (Exception ex)
             {
-                SnackbarService.ShowMessage($"Error opening connection for [{settings.Protocollo}]: {ex.Message}.");
+                SnackbarService.ShowMessage($"Error connection for [{settings.Protocollo}]: {ex.Message}.");
+            }
+            finally
+            {
+                Comandi = string.Empty;
             }
         }
+
+        void OpenFileForComandi()
+        {
+            Comandi = string.Empty;
+            var settings = App.SettingsProtocol;
+
+            OpenFileDialog ofd = new()
+            {
+                DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+            if (settings.Protocollo == "Custom")
+            {
+                ofd.Filter = "Designer file (*.dsf)|*.dsf|All files (*.*)|*.*";
+            }
+            else if (settings.Protocollo == "XonXoff")
+            {
+                ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            }
+            else
+            {
+                SnackbarService.ShowMessage("Miss protocol settings");
+                return;
+            }
+
+            if (ofd.ShowDialog() == true)
+            {
+                using var reader = new StreamReader(ofd.FileName);
+                Comandi = reader.ReadToEnd();
+                SnackbarService.ShowMessage("Eseguo questi comandi?", "Si", async () =>
+                {
+                    await SendCommandForProtocolAsync();
+                    Comandi = string.Empty;
+                });
+            }
+        }
+
+        private void ScriviResponseBox(string riga)
+        {
+            StringBuilder sb = new(ResponseComandi);
+            sb.AppendLine(riga);
+            ResponseComandi = sb.ToString();
+        }
+        #endregion Metodi
 
         #region XonXoff
         bool XonXoff_Seriale()
@@ -172,6 +229,8 @@ namespace Check.SPort.ViewModel
                 NewLine = Environment.NewLine,
                 Handshake = settings.SerialPort.Handshake
             };
+            Connection_XonXoff_Seriale.DataReceived += SerialPort_DataReceived;
+            Connection_XonXoff_Seriale.ErrorReceived += SerialPort_ErrorReceived;
 
             try
             {
@@ -213,7 +272,7 @@ namespace Check.SPort.ViewModel
                     await SendCommandAsync(buffer, stream);
                     var responseBuffer = await ReceiveResponseAsync(stream);
 
-                    if (responseBuffer.Length > 1)
+                    if (responseBuffer.Length > 3)
                     {
                         string controlCode = Encoding.ASCII.GetString(responseBuffer[^3..^1]);
 
@@ -227,9 +286,8 @@ namespace Check.SPort.ViewModel
                         {
                             SnackbarService.ShowMessage("Via libera ricevuta (Xon), posso continuare.\n");
                         }
-
-                        //ScriviResponseBox(Encoding.ASCII.GetString(responseBuffer));
                     }
+                    ScriviResponseBox(Encoding.ASCII.GetString(responseBuffer));
                 }
             }
 
@@ -244,6 +302,23 @@ namespace Check.SPort.ViewModel
                 byte[] buffer = new byte[256];
                 int bytesRead = await stream.ReadAsync(buffer);
                 return [.. buffer.Take(bytesRead)];
+            }
+        }
+
+        private void SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+            if (sender is SerialPort sp && sp.IsOpen)
+            {
+                SnackbarService.ShowMessage($"Errore: {Enum.GetName(e.EventType)}, codice: {(int)e.EventType}");
+            }
+        }
+
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (sender is SerialPort sp && sp.IsOpen)
+            {
+                string indata = sp.ReadExisting();
+                SnackbarService.ShowMessage($"Response: {indata}");
             }
         }
         #endregion XonXoff
@@ -306,9 +381,10 @@ namespace Check.SPort.ViewModel
             foreach (var cmd in Comandi.Split(Environment.NewLine))
             {
                 EseguiComando(Connection_Custom, cmd, out string cmdResponse);
+                ScriviResponseBox(cmdResponse);
             }
 
-            int EseguiComando(CeFCom ceFCom, string command, out string cmdResponse)
+            static int EseguiComando(CeFCom ceFCom, string command, out string cmdResponse)
             {
                 int response = 0;
                 cmdResponse = string.Empty;
@@ -334,6 +410,16 @@ namespace Check.SPort.ViewModel
                 OnPropertyChanged(nameof(Comandi));
             }
         }
+        public string ResponseComandi
+        {
+            get => _responseComandi;
+            set
+            {
+                _responseComandi = value;
+                OnPropertyChanged(nameof(ResponseComandi));
+                BadgeCount = _responseComandi.Length;
+            }
+        }
         public bool IsConnection
         {
             get => _isConnection;
@@ -343,6 +429,21 @@ namespace Check.SPort.ViewModel
                 OnPropertyChanged(nameof(IsConnection));
                 if (!IsConnection) Comandi = string.Empty;
             }
+        }
+
+        public bool ActiveFlipper
+        {
+            get => _activeFlipper;
+            set
+            {
+                _activeFlipper = value;
+                OnPropertyChanged(nameof(ActiveFlipper));
+            }
+        }
+        public int BadgeCount
+        {
+            get => _badgeCount;
+            set { _badgeCount = value; OnPropertyChanged(nameof(BadgeCount)); }
         }
         public string NameProtocol { get; }
         public string NameMode { get; }
