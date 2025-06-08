@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Check.SPort.ViewModel
         private const string NAK_CODE = "14";
         private const string XON_CODE = "11";
         private string _comandi;
+        private bool _isConnection;
         #endregion Property
 
         public ComunicazioneViewModel()
@@ -32,11 +34,20 @@ namespace Check.SPort.ViewModel
         }
 
         #region Command
-        public ICommand OpenCommand => new RelayCommand(_ => OpenConnection());
-        public ICommand CloseCommand => new RelayCommand(_ => CloseConnection());
-        public ICommand SendCommand => new RelayCommand(x =>
+        public ICommand OnOffCommand => new RelayCommand(sender =>
         {
-        }, _ => !string.IsNullOrEmpty(Comandi));
+            if (IsConnection)
+            {
+                CloseCommand.Execute(this);
+            }
+            else
+            {
+                OpenCommand.Execute(this);
+            }
+        });
+        public ICommand OpenCommand => new RelayCommand(_ => IsConnection = OpenConnection());
+        public ICommand CloseCommand => new RelayCommand(_ => CloseConnection());
+        public ICommand SendCommand => new RelayCommand(async _ => await SendCommandForProtocolAsync(), _ => !string.IsNullOrEmpty(Comandi));
         #endregion Command
 
         bool OpenConnection()
@@ -86,6 +97,7 @@ namespace Check.SPort.ViewModel
                     if (Connection_Custom.EthernetPortIsOpened || Connection_Custom.SerialPortIsOpened)
                     {
                         resultCommand = Connection_Custom.CEFClose();
+                        IsConnection = false;
                     }
                 }
                 else if (settings.Protocollo == "XonXoff")
@@ -93,11 +105,15 @@ namespace Check.SPort.ViewModel
                     if (settings.IsEthernet && Connection_XonXoff_Ethernet.Connected)
                     {
                         Connection_XonXoff_Ethernet.Close();
+                        IsConnection = Connection_XonXoff_Ethernet.Connected;
+                        Connection_XonXoff_Ethernet = null;
                     }
                     else if(settings.IsSeriale && Connection_XonXoff_Seriale.IsOpen)
                     {
                         Connection_XonXoff_Seriale.Write("Y");
                         Connection_XonXoff_Seriale.Close();
+                        IsConnection = Connection_XonXoff_Seriale.IsOpen;
+                        Connection_XonXoff_Seriale = null;
                     }
                 }
             }
@@ -107,21 +123,58 @@ namespace Check.SPort.ViewModel
             }
         }
 
+        async Task SendCommandForProtocolAsync()
+        {
+            var settings = App.SettingsProtocol;
+            try
+            {
+                if (settings.IsSeriale)
+                {
+                    if (settings.Protocollo == "XonXoff")
+                    {
+                        await XonXoff_Write(true);
+                    }
+                    else if (settings.Protocollo == "Custom")
+                    {
+                        Custom_Write();
+                    }
+                }
+                else if (settings.IsEthernet)
+                {
+                    if (settings.Protocollo == "XonXoff")
+                    {
+                        await XonXoff_Write(false);
+                    }
+                    else if (settings.Protocollo == "Custom")
+                    {
+                        Custom_Write();
+                    }
+                }
+                else
+                {
+                    SnackbarService.ShowMessage("No protocol selected.");
+                }
+            }
+            catch (Exception ex)
+            {
+                SnackbarService.ShowMessage($"Error opening connection for [{settings.Protocollo}]: {ex.Message}.");
+            }
+        }
+
         #region XonXoff
         bool XonXoff_Seriale()
         {
             var settings = App.SettingsProtocol;
-            Connection_XonXoff_Seriale = settings.SerialPort;
-            Connection_XonXoff_Seriale.ReadTimeout = 5000;
-            Connection_XonXoff_Seriale.WriteTimeout = 5000;
-            Connection_XonXoff_Seriale.NewLine = Environment.NewLine;
+            Connection_XonXoff_Seriale = new SerialPort(settings.SerialPort.PortName, settings.SerialPort.BaudRate, settings.SerialPort.Parity, settings.SerialPort.DataBits, settings.SerialPort.StopBits)
+            {
+                ReadTimeout = 5000,
+                WriteTimeout = 5000,
+                NewLine = Environment.NewLine,
+                Handshake = settings.SerialPort.Handshake
+            };
 
             try
             {
-                if (Connection_XonXoff_Seriale.IsOpen)
-                {
-                    Connection_XonXoff_Seriale.Close();
-                }
                 Connection_XonXoff_Seriale.Open();
             }
             catch (Exception ex)
@@ -133,20 +186,65 @@ namespace Check.SPort.ViewModel
         bool XonXoff_Ethernet()
         {
             var settings = App.SettingsProtocol;
-            Connection_XonXoff_Ethernet = settings.TcpClient;
+            Connection_XonXoff_Ethernet = new TcpClient();
             try
             {
-                if (Connection_XonXoff_Ethernet.Connected)
-                {
-                    Connection_XonXoff_Ethernet.Close();
-                }
-                Connection_XonXoff_Ethernet.Connect(EthernetSettings.IpAddress, EthernetSettings.Port);
+                Connection_XonXoff_Ethernet.Connect(IPAddress.Parse(EthernetSettings.IpAddress), EthernetSettings.Port);
             }
             catch (Exception ex)
             {
                 SnackbarService.ShowMessage(ex.Message, "OK", () => { });
             }
             return Connection_XonXoff_Ethernet.Connected;
+        }
+        private async Task XonXoff_Write(bool isSerial)
+        {
+            foreach (var cmd in Comandi.Split(Environment.NewLine))
+            {
+                if (isSerial)
+                {
+                    Connection_XonXoff_Seriale.WriteLine(cmd);
+                }
+                else
+                {
+                    byte[] buffer = Encoding.ASCII.GetBytes(cmd);
+                    var stream = Connection_XonXoff_Ethernet.GetStream();
+
+                    await SendCommandAsync(buffer, stream);
+                    var responseBuffer = await ReceiveResponseAsync(stream);
+
+                    if (responseBuffer.Length > 1)
+                    {
+                        string controlCode = Encoding.ASCII.GetString(responseBuffer[^3..^1]);
+
+                        if (controlCode == NAK_CODE)
+                        {
+                            SnackbarService.ShowMessage("Errore ricevuto (NAK), in attesa di riprovare...");
+                            await Task.Delay(1000);
+                            await SendCommandAsync(buffer, stream);
+                        }
+                        else if (controlCode == XON_CODE)
+                        {
+                            SnackbarService.ShowMessage("Via libera ricevuta (Xon), posso continuare.\n");
+                        }
+
+                        //ScriviResponseBox(Encoding.ASCII.GetString(responseBuffer));
+                    }
+                }
+            }
+
+            async Task SendCommandAsync(byte[] buffer, NetworkStream stream)
+            {
+                await stream.WriteAsync(buffer);
+                await stream.FlushAsync();
+            }
+
+            async Task<byte[]> ReceiveResponseAsync(NetworkStream stream)
+            {
+                byte[] buffer = new byte[256];
+                int bytesRead = await stream.ReadAsync(buffer);
+                return [.. buffer.Take(bytesRead)];
+            }
         }
         #endregion XonXoff
 
@@ -202,6 +300,28 @@ namespace Check.SPort.ViewModel
             }
             return retunCommand == 0;
         }
+
+        private void Custom_Write()
+        {
+            foreach (var cmd in Comandi.Split(Environment.NewLine))
+            {
+                EseguiComando(Connection_Custom, cmd, out string cmdResponse);
+            }
+
+            int EseguiComando(CeFCom ceFCom, string command, out string cmdResponse)
+            {
+                int response = 0;
+                cmdResponse = string.Empty;
+
+                response = ceFCom.CEFWriteRead(command, out cmdResponse);
+
+                if (cmdResponse.Contains("ERR99"))
+                {
+                    response = ceFCom.CEFWriteRead("1015", out cmdResponse);
+                }
+                return response;
+            }
+        }
         #endregion Custom
 
         #region Binding
@@ -214,7 +334,16 @@ namespace Check.SPort.ViewModel
                 OnPropertyChanged(nameof(Comandi));
             }
         }
-
+        public bool IsConnection
+        {
+            get => _isConnection;
+            set
+            {
+                _isConnection = value;
+                OnPropertyChanged(nameof(IsConnection));
+                if (!IsConnection) Comandi = string.Empty;
+            }
+        }
         public string NameProtocol { get; }
         public string NameMode { get; }
         public CeFCom Connection_Custom { get; set; }

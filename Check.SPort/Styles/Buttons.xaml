@@ -15,6 +15,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
                             <Setter Property="Foreground" TargetName="IconMinemize" Value="Yellow" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
@@ -45,6 +46,7 @@
                         <!-- Cambia colore all'hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="IconMaximize" Property="Foreground" Value="Yellow"/>
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
                         <!-- Cambia colore alla pressione -->
                         <Trigger Property="IsPressed" Value="True">
@@ -77,6 +79,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Kind" TargetName="IconPower" Value="PowerCycle" />
                             <Setter Property="Foreground" TargetName="IconPower" Value="Yellow" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Kind" TargetName="IconPower" Value="WindowClose" />
@@ -113,6 +116,54 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                     
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="OpenBtnStyle" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Width" Value="75" />
+        <Setter Property="Height" Value="70" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderBtn" Background="Gray" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock x:Name="TestoButton" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" />
+                            <ToggleButton x:Name="TB" 
+                                          Width="20" 
+                                          Height="20"
+                                          Margin="2"
+                                          Grid.Row="1"
+                                          Style="{StaticResource MaterialDesignActionAccentToggleButton}" 
+                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" IsEnabled="False">
+                                <md:ToggleButtonAssist.SwitchTrackOnBackground>
+                                    <SolidColorBrush Color="DarkGreen" Opacity="0.8" />
+                                </md:ToggleButtonAssist.SwitchTrackOnBackground>
+                                <md:ToggleButtonAssist.SwitchTrackOffBackground>
+                                    <SolidColorBrush Color="LightSalmon" Opacity="0.8" />
+                                </md:ToggleButtonAssist.SwitchTrackOffBackground>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" Value="{StaticResource TrueValue}">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Green" />
+                            <Setter Property="Text" TargetName="TestoButton" Value="O N" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" Value="{StaticResource FalseValue}">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Crimson" />
+                            <Setter Property="Text" TargetName="TestoButton" Value="O F F" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

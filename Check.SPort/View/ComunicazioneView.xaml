@@ -39,7 +39,7 @@
                         <RowDefinition Height="25" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Panel.ZIndex="1">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
@@ -49,17 +49,9 @@
 
                         <Button x:Name="BtnOpen"
                                 Grid.Column="0"
-                                Command="{Binding OpenCommand}"
-                                Height="40"
-                                Width="100"
-                                Margin="15"
-                                Background="Crimson"
-                                HorizontalAlignment="Center"
-                                Style="{StaticResource MaterialDesignRaisedDarkButton}">
-                            <Button.Content>
-                                <md:PackIcon Kind="Connection" />
-                            </Button.Content>
-                        </Button>
+                                Command="{Binding OnOffCommand}"
+                                CommandParameter="{Binding ElementName=BtnOpen}"
+                                Style="{StaticResource OpenBtnStyle}" />
 
                         <Grid Grid.Column="1">
                             <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="4">
@@ -76,8 +68,20 @@
                                              Padding="15,15,0,0"
                                              VerticalAlignment="Stretch"
                                              HorizontalAlignment="Stretch"
-                                             Background="WhiteSmoke"
-                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>              
+                                             IsEnabled="{Binding IsConnection}">
+                                        <TextBox.Style>
+                                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="LightGray" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="Background" Value="WhiteSmoke" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>           
                                 </ScrollViewer>
                             </Border>
                         </Grid>

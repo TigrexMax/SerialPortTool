@@ -74,7 +74,7 @@ namespace Check.SPort.Models
                 LogLevel = LogLevelEnum.None
             };
 
-            Protocollo = "Custom";
+            Protocollo = "XonXoff";
             IsSeriale = false;
             IsEthernet = true;
         }
