@@ -1,5 +1,4 @@
-﻿using Check.SPort.Models;
-using Check.SPort.Utilities;
+﻿using Check.SPort.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,29 +7,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace Check.SPort.ViewModel
 {
-    class NavigationVM : BaseViewModel
+    class NavigationViewModel : BaseViewModel
     {
         #region Property
         private object _currentView;
         #endregion Property
 
-        public NavigationVM()
+        public NavigationViewModel()
         {
             HomeCommand = new RelayCommand(Home);
-            ProtocolCustomCommand = new RelayCommand(Custom);
-            ProtocolXonXOffCommand = new RelayCommand(XonXoff);
+            SettingsCommand = new RelayCommand(Custom);
+            ComunicazioneCommand = new RelayCommand(XonXoff);
 
             // Startup Page
-            CurrentViewModel = new MainViewModel();
+            CurrentViewModel = new HomeViewModel();
         }
 
         #region Command
         public ICommand HomeCommand { get; set; }
-        public ICommand ProtocolCustomCommand { get; }
-        public ICommand ProtocolXonXOffCommand { get; }
+        public ICommand SettingsCommand { get; }
+        public ICommand ComunicazioneCommand { get; }
         public ICommand CloseAppCommand => new RelayCommand(CloseApp);
         public ICommand MaxAppCommand => new RelayCommand(MaxApp);
         public ICommand MiniAppCommand => new RelayCommand(MiniApp);
@@ -38,9 +38,21 @@ namespace Check.SPort.ViewModel
 
         #region Metodi
         // Close App
-        public void CloseApp(object obj)
+        public async void CloseApp(object obj)
         {
+            DisposeConnection();
+
             MainWindow win = obj as MainWindow;
+            win.ResizeMode = ResizeMode.NoResize;
+            win.MinWidth = 90;
+
+            // Recupero lo storyboard della chiusura
+            Storyboard sb = (Storyboard)win.Resources["WindowExitStoryboard"];
+            if (sb != null)
+            {
+                sb.Begin(); // Avvia l'animazione
+                await Task.Delay(1000); // Attendi che finisca (deve corrispondere alla durata dell'animazione)
+            }
             win.Close();
         }
 
@@ -65,9 +77,15 @@ namespace Check.SPort.ViewModel
             win.WindowState = WindowState.Minimized;
         }
 
-        private void Home(object obj) => CurrentViewModel = new MainViewModel();
-        private void XonXoff(object obj) => CurrentViewModel = new ProtocolXonXoffVM();
-        private void Custom(object obj) => CurrentViewModel = new ProtocolCustomVM();
+        private void Home(object obj) => CurrentViewModel = new HomeViewModel();
+        private void XonXoff(object obj) => CurrentViewModel = new ComunicazioneViewModel();
+        private void Custom(object obj) => CurrentViewModel = new SettingsViewModel();
+
+        private void DisposeConnection()
+        {
+            App.SettingsProtocol.SerialPort.Dispose();
+            App.SettingsProtocol.TcpClient.Dispose();
+        }
         #endregion Metodi
 
         #region Binding

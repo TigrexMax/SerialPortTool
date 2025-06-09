@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="Check.SPort.View.ComunicazioneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Check.SPort.View"
+             xmlns:vm="clr-namespace:Check.SPort.ViewModel"
+             FontFamily="Segoe UI Semibold"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="725"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <vm:ComunicazioneViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="9">
+        <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding NameProtocol}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10,10,0,0" Foreground="DarkCyan" md:ElevationAssist.Elevation="Dp12" />
+                    <TextBlock Text="{Binding NameMode}" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="10,0,0,0" Foreground="DarkCyan" />
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="1">
+                        <Grid.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SendCommand}" />
+                        </Grid.InputBindings>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="300*" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+
+                        <UniformGrid Rows="2" VerticalAlignment="Top" Grid.Column="0">
+
+                            <Button x:Name="BtnOpen"
+                                    VerticalAlignment="Top"
+                                    Effect="{StaticResource ShadowDepth8}"
+                                    Command="{Binding OnOffCommand}"
+                                    CommandParameter="{Binding ElementName=BtnOpen}"
+                                    Style="{StaticResource OpenBtnStyle}" />
+
+                            <md:Badged Badge="{Binding BadgeCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                       HorizontalAlignment="Center" 
+                                       FlowDirection="LeftToRight" 
+                                       BadgePlacementMode="BottomRight"
+                                       Margin="10,5"
+                                       BadgeBackground="DarkGray"
+                                       BadgeForeground="Black"
+                                       Style="{StaticResource MaterialDesignBadge}">
+                                <Button x:Name="BtnResponseCmd"
+                                        Height="55"
+                                        Width="100"
+                                        Background="Goldenrod"
+                                        md:ButtonAssist.CornerRadius="8"
+                                        BorderThickness="1.5"
+                                        BorderBrush="Gray"
+                                        Grid.Column="1"
+                                        Effect="{StaticResource ShadowDepth8}"
+                                        Command="{Binding ActiveFlipperCommand}"
+                                        Style="{StaticResource MaterialDesignFlatButton}">
+                                    <TextBlock Text="View Response" TextWrapping="Wrap" TextAlignment="Center" />
+                                </Button>
+                            </md:Badged>
+                        </UniformGrid>
+
+                        <Grid Grid.Column="1">
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="5">
+                                <md:Flipper md:ElevationAssist.Elevation="Dp0" 
+                                            IsFlipped="{Binding ActiveFlipper, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            MinWidth="300" MinHeight="200"
+                                            x:Name="FlipperTesto">
+                                    <md:Flipper.FrontContent>
+                                        <Grid Background="Transparent">
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                <TextBox x:Name="TxtCommandi"
+                                                         Text="{Binding Comandi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         FontSize="21"
+                                                         FontFamily="OCR A Extended"
+                                                         AcceptsReturn="True"
+                                                         AcceptsTab="False"
+                                                         TextWrapping="Wrap"
+                                                         Padding="15,15,0,0"
+                                                         MinWidth="{Binding ElementName=FlipperTesto, Path=ActualWidth}"
+                                                         Height="{Binding ElementName=FlipperTesto, Path=ActualHeight}"
+                                                         md:HintAssist.Hint="Scrivi o incolla comando"
+                                                         md:HintAssist.IsFloating="False"
+                                                         IsEnabled="{Binding IsConnection}">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter Property="Background" Value="LightGray" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsEnabled" Value="True">
+                                                                    <Setter Property="Background" Value="WhiteSmoke" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                </TextBox>
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </md:Flipper.FrontContent>
+                                    <md:Flipper.BackContent>
+                                        <Grid Background="Transparent">
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                <TextBox x:Name="TxtResponse"
+                                                         Text="{Binding ResponseComandi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         FontSize="21"
+                                                         FontFamily="OCR A Extended"
+                                                         AcceptsReturn="True"
+                                                         AcceptsTab="False"
+                                                         TextWrapping="Wrap"
+                                                         Padding="15,15,0,0"
+                                                         Background="WhiteSmoke"
+                                                         Width="{Binding ElementName=FlipperTesto, Path=ActualWidth}"
+                                                         Height="{Binding ElementName=FlipperTesto, Path=ActualHeight}"
+                                                         IsReadOnly="True">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                                    </TextBox.Style>
+                                                </TextBox>
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </md:Flipper.BackContent>
+                                </md:Flipper>
+                            </Border>
+                        </Grid>
+
+                        <UniformGrid Rows="2" Grid.Column="2" VerticalAlignment="Top">
+
+                            <Button x:Name="BtnSend"
+                                    Effect="{StaticResource ShadowDepth8}"
+                                    Command="{Binding SendCommand}"
+                                    Style="{StaticResource SendButtonStyle}" />
+
+                            <Button x:Name="BtnFile"
+                                    Effect="{StaticResource ShadowDepth8}"
+                                    Command="{Binding FileCommand}"
+                                    Style="{StaticResource FileButtonStyle}" />
+
+                        </UniformGrid>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+        </Border>
+    </Grid>
+
+</UserControl>

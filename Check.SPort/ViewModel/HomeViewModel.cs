@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Check.SPort.ViewModel
 {
-    public class MainViewModel : BaseViewModel
+    public class HomeViewModel : BaseViewModel
     {
         #region Property
         #endregion Property
 
-        public MainViewModel()
+        public HomeViewModel()
         {
         }
 

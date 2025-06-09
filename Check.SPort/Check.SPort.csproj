@@ -6,13 +6,14 @@
 		<Nullable>disable</Nullable>
 		<UseWPF>true</UseWPF>
 		<SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
-		<UseWindowsForms>False</UseWindowsForms>
+		<UseWindowsForms>True</UseWindowsForms>
 		<AssemblyName>Check Connection Protocoll</AssemblyName>
-		<AssemblyVersion>1.0.3</AssemblyVersion>
-		<FileVersion>1.0.3</FileVersion>
+		<AssemblyVersion>2.0.1</AssemblyVersion>
+		<FileVersion>2.0.1</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Resources\DLL\CustomEngineering.CeFCom.dll" />
 		<None Remove="Resources\Image\home_sfondo_2.png" />
 		<None Remove="Resources\Image\sfondo_001.jpg" />
 	</ItemGroup>
@@ -23,12 +24,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Resources\DLL\CustomEngineering.CeFCom.dll">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Resources\Image\home_sfondo_2.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Resources\Image\sfondo_001.jpg">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="CustomEngineering.CeFCom">
+	    <HintPath>Resources\DLL\CustomEngineering.CeFCom.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Styles\ComboBoxs.xaml">
+	    <CopyToOutputDirectory></CopyToOutputDirectory>
+	  </Page>
 	</ItemGroup>
 
 </Project>

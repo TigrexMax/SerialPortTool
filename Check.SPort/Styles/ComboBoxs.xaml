@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <Style x:Key="FilledComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Height" Value="55" />
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF8054D0" Offset="0.821"/>
+                    <GradientStop Color="#FF5651EA" Offset="0"/>
+                    <GradientStop Color="#FF31C3C7" Offset="0.173"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="md:HintAssist.IsFloating" Value="{StaticResource TrueValue}" />
+        <Setter Property="md:HintAssist.Foreground" Value="Black" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignComboBoxItemStyle}" />
+        <Setter Property="Template" Value="{StaticResource MaterialDesignFloatingHintComboBoxTemplate}" />
+    </Style>
+
+    <Style x:Key="FilledComboBox_2" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FilledComboBox}">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="Padding" Value="10,5,5,0" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="md:HintAssist.Foreground" Value="AliceBlue" />
+    </Style>
+
+    <Style x:Key="CB_Protocol_Style" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
+        <Setter Property="Width" Value="160" />
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Padding" Value="12,0,10,0" />
+        <Setter Property="Background" Value="LightGray" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="md:TextFieldAssist.TextFieldCornerRadius" Value="20" />
+    </Style>
+
+</ResourceDictionary>

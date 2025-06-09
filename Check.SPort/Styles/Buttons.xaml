@@ -15,6 +15,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
                             <Setter Property="Foreground" TargetName="IconMinemize" Value="Yellow" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Kind" TargetName="IconMinemize" Value="WindowMinimize" />
@@ -25,31 +26,46 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="MaxAppStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="40" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" BorderBrush="White" Background="#272B2F">
-                        <md:PackIcon x:Name="IconMaximize" Kind="WindowMaximize" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                    <Border x:Name="BorderBtn" BorderThickness="0" CornerRadius="25" Background="#272B2F">
+
+                        <md:PackIcon x:Name="IconMaximize" Kind="WindowMaximize"
+                                     Width="25" Height="25"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Foreground="White" />
                     </Border>
+
                     <ControlTemplate.Triggers>
+                        <!-- Cambia colore all'hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
-                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Yellow" />
+                            <Setter TargetName="IconMaximize" Property="Foreground" Value="Yellow"/>
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
+                        <!-- Cambia colore alla pressione -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Kind" TargetName="IconMaximize" Value="WindowRestore" />
-                            <Setter Property="Foreground" TargetName="IconMaximize" Value="Orange" />
+                            <Setter TargetName="IconMaximize" Property="Foreground" Value="Orange"/>
                         </Trigger>
+
+                        <!-- Cambia icona in base allo stato della finestra -->
+                        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                            <Setter TargetName="IconMaximize" Property="Kind" Value="WindowRestore"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Normal">
+                            <Setter TargetName="IconMaximize" Property="Kind" Value="WindowMaximize"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="ExitApp" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="40" />
@@ -63,6 +79,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Kind" TargetName="IconPower" Value="PowerCycle" />
                             <Setter Property="Foreground" TargetName="IconPower" Value="Yellow" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="#FF4E5256" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Kind" TargetName="IconPower" Value="WindowClose" />
@@ -74,21 +91,108 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
-        <Setter Property="Margin" Value="10" />
+    <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Margin" Value="10,5" />
         <Setter Property="Width" Value="75" />
         <Setter Property="Height" Value="55" />
-        <Setter Property="BorderBrush" Value="Black" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="md:HintAssist.IsFloating" Value="False" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding Text.Length, ElementName=txtCMD}" Value="0">
-                <Setter Property="IsEnabled" Value="False"/>
-            </DataTrigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity" Value="1.0" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
+                        <md:PackIcon x:Name="BtnSend" Kind="Send" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Turquoise" />
+                            <Setter Property="BorderBrush" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="FrameworkElement.Cursor" Value="No" />
+                            <Setter Property="UIElement.Opacity" Value="0.38" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FileButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Margin" Value="10,5" />
+        <Setter Property="Width" Value="75" />
+        <Setter Property="Height" Value="55" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
+                        <md:PackIcon x:Name="BtnSend" Kind="FileCode" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Turquoise" />
+                            <Setter Property="BorderBrush" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="FrameworkElement.Cursor" Value="No" />
+                            <Setter Property="UIElement.Opacity" Value="0.38" />
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="OpenBtnStyle" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="10,5" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="70" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="BorderBtn" Background="Gray" BorderThickness="10,3.5" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="30">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="TestoButton" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" />
+                            <ToggleButton x:Name="TB" 
+                                          Width="20" 
+                                          Height="20"
+                                          Margin="2"
+                                          Grid.Row="1"
+                                          Style="{StaticResource MaterialDesignActionAccentToggleButton}" 
+                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" IsEnabled="False">
+                                <md:PackIcon Kind="Plug" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" Value="{StaticResource TrueValue}">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Green" />
+                            <Setter Property="Text" TargetName="TestoButton" Value="O N" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsConnection}" Value="{StaticResource FalseValue}">
+                            <Setter Property="Background" TargetName="BorderBtn" Value="Crimson" />
+                            <Setter Property="Text" TargetName="TestoButton" Value="O F F" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="md:ElevationAssist.Elevation" Value="Dp6" />
     </Style>
 
     <Style x:Key="BtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">
@@ -127,7 +231,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BtnXonXoffStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+    <Style x:Key="BtnProtocolStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -149,23 +253,91 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BtnCustomStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
+    <Style x:Key="BtnSettingsStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BtnNaviStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="BorderCustom" BorderThickness="0" CornerRadius="25" Background="Transparent">
-                        <md:PackIcon Name="IconCustom" Kind="PrinterPosNetwork" Foreground="Tomato" Height="35" Width="35" />
+                    <Border x:Name="BorderSetting" BorderThickness="0" CornerRadius="25" Background="Transparent">
+                        <md:PackIcon Name="IconSettings" Kind="Settings" Foreground="Tomato" Height="35" Width="35" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosCheck" />
-                            <Setter Property="Foreground" TargetName="IconCustom" Value="Ivory" />
+                            <Setter Property="Kind" TargetName="IconSettings" Value="Settings" />
+                            <Setter Property="Foreground" TargetName="IconSettings" Value="Ivory" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Kind" TargetName="IconCustom" Value="PrinterPosNetworkOutline" />
-                            <Setter Property="Foreground" TargetName="IconCustom" Value="Coral" />
+                            <Setter Property="Kind" TargetName="IconSettings" Value="SettingsOutline" />
+                            <Setter Property="Foreground" TargetName="IconSettings" Value="Coral" />
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnRefreshSetting_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="90" />
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn1" TargetType="{x:Type Button}">
+                    <Border Background="White" BorderThickness="1" BorderBrush="DarkOrange" CornerRadius="5">
+                        <ContentPresenter>
+                            <ContentPresenter.Content>
+                                <DockPanel HorizontalAlignment="Center">
+                                    <md:PackIcon Kind="Refresh" VerticalAlignment="Center" />
+                                    <TextBlock Text="Refesh" VerticalAlignment="Center" Margin="5,0" />
+                                </DockPanel>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnSaveSetting_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="90" />
+        <Setter Property="Margin" Value="5,0,15,0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn2" TargetType="{x:Type Button}">
+                    <Border x:Name="Bord" Background="White" BorderThickness="1" BorderBrush="DarkOrange" CornerRadius="5">
+                        <ContentPresenter x:Name="BtnSavePresenter">
+                            <ContentPresenter.Content>
+                                <DockPanel HorizontalAlignment="Center">
+                                    <md:PackIcon Kind="ContentSave" VerticalAlignment="Center" />
+                                    <TextBlock Text="Salva" VerticalAlignment="Center" Margin="5,0" />
+                                </DockPanel>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bord" Property="Background" Value="LightCyan" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnSearchCOM_Style" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="Btn3" TargetType="{x:Type Button}">
+                    <Border x:Name="Bord" Background="Goldenrod" BorderBrush="Black" BorderThickness="1.5" CornerRadius="3">
+                        <DockPanel HorizontalAlignment="Center">
+                            <md:PackIcon Kind="Search" VerticalAlignment="Center" Margin="3,0" />
+                            <TextBlock Text="Cerca-COM" VerticalAlignment="Center" FontSize="13" FontFamily="Tw Cen MT Condensed Extra Bold" />
+                        </DockPanel>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

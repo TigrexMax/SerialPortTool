@@ -1,0 +1,208 @@
+﻿<UserControl x:Class="Check.SPort.View.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Check.SPort.View"
+             xmlns:vm="clr-namespace:Check.SPort.ViewModel"
+             FontFamily="Segoe UI"
+             FontWeight="SemiBold"
+             FontSize="15"
+             mc:Ignorable="d" 
+             d:DesignHeight="350"
+             d:DesignWidth="700"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <vm:SettingsViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="9">
+
+        <Border CornerRadius="0,0,20,0" Background="{StaticResource MaterialDesignDarkBackground}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+
+                    <Grid Margin="5,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <md:Card UniformCornerRadius="10" Margin="3" Style="{StaticResource MaterialDesignOutlinedCard}">
+                            <md:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF3E468C" Offset="0.81"/>
+                                    <GradientStop Color="#FF2E3FCE" Offset="0.602"/>
+                                    <GradientStop Color="#FFA82ECE" Offset="0.091"/>
+                                </LinearGradientBrush>
+                            </md:Card.Background>
+                            
+                            <Grid Margin="10">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <ComboBox md:HintAssist.Hint="Baud Rate"
+                                          Grid.Row="0"
+                                          Grid.Column="0"
+                                          ItemsSource="{Binding SettingReg.SerialPortSettings.BaudRateList}" 
+                                          SelectedValue="{Binding SettingReg.SerialPortSettings.BaudRate}"
+                                          Style="{StaticResource FilledComboBox}" BorderBrush="Black">
+                                </ComboBox>
+
+                                <ComboBox md:HintAssist.Hint="Parity"
+                                          Grid.Row="0"
+                                          Grid.Column="1"
+                                          ItemsSource="{Binding SettingReg.SerialPortSettings.Parities}"
+                                          SelectedValue="{Binding SettingReg.SerialPortSettings.Parity}"
+                                          Style="{StaticResource FilledComboBox}"/>
+
+                                <ComboBox md:HintAssist.Hint="Stop Bit"
+                                          Grid.Row="1"
+                                          Grid.Column="0"
+                                          ItemsSource="{Binding SettingReg.SerialPortSettings.StopBitsList}"
+                                          SelectedValue="{Binding SettingReg.SerialPortSettings.StopBits}"
+                                          Style="{StaticResource FilledComboBox}"/>
+
+                                <ComboBox md:HintAssist.Hint="Data Bit"
+                                          Grid.Row="1"
+                                          Grid.Column="1"
+                                          ItemsSource="{Binding SettingReg.SerialPortSettings.DataBitsList}" 
+                                          SelectedValue="{Binding SettingReg.SerialPortSettings.DataBits}"
+                                          Style="{StaticResource FilledComboBox}"/>
+
+                                <ComboBox md:HintAssist.Hint="Handshake"
+                                          Grid.Row="2"
+                                          Grid.Column="0"
+                                          ItemsSource="{Binding SettingReg.SerialPortSettings.Handshakes}" 
+                                          SelectedValue="{Binding SettingReg.SerialPortSettings.HandshakeProp}"
+                                          Style="{StaticResource FilledComboBox}"/>
+
+                                <CheckBox Content="Dtr Enable" 
+                                          Width="auto" 
+                                          Height="30" 
+                                          Grid.Row="3" 
+                                          Grid.Column="0"
+                                          Margin="20,0,0,0"
+                                          IsChecked="{Binding SettingReg.SerialPortSettings.Dtr}"
+                                          Style="{StaticResource MaterialDesignLightCheckBox}" />
+
+                                <CheckBox Content="Rtr Enable" 
+                                          Width="auto" 
+                                          Height="30" 
+                                          Grid.Row="3"
+                                          Grid.Column="1"
+                                          Margin="20,0,0,0"
+                                          IsChecked="{Binding SettingReg.SerialPortSettings.Rts}"
+                                          Style="{StaticResource MaterialDesignLightCheckBox}"/>
+                            </Grid>
+                        </md:Card>
+
+                        <md:Card UniformCornerRadius="10" Margin="3" Style="{StaticResource MaterialDesignOutlinedCard}" Grid.Column="1">
+                            <md:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF3E468C" Offset="0.81"/>
+                                    <GradientStop Color="#FF2E3FCE" Offset="0.602"/>
+                                    <GradientStop Color="#FFA82ECE" Offset="0.091"/>
+                                </LinearGradientBrush>
+                            </md:Card.Background>
+                            
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <RadioButton Content="Serial" GroupName="ConnType" IsChecked="{Binding IsSerial}" />
+
+                                    <ComboBox Grid.Column="1"
+                                              md:HintAssist.Hint="Select Name Port"
+                                              ItemsSource="{Binding SerialPorts}" 
+                                              SelectedValue="{Binding SettingReg.SerialPort.PortName}"
+                                              Style="{StaticResource FilledComboBox_2}"/>
+
+                                    <Button Grid.Column="2" 
+                                            Command="{Binding SearchPortCOMCommand}"
+                                            Style="{StaticResource BtnSearchCOM_Style}"/>
+                                </Grid>
+
+
+                                <Grid Grid.Row="1">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <RadioButton Content="Ethernet" 
+                                                 GroupName="ConnType" 
+                                                 IsChecked="{Binding IsEthernet}" />
+                                    
+                                    <TextBox x:Name="TxtIpAdress" Grid.Column="1" 
+                                             Text="{Binding SettingReg.EthernetSettings.IpAddress}" 
+                                             Style="{StaticResource IpAddressStyle}"
+                                             PreviewTextInput="TxtIpAdress_PreviewTextInput" />
+
+                                    <TextBox Grid.Column="2" 
+                                             Height="30" 
+                                             Width="100" 
+                                             Padding="0"
+                                             MaxLength="4"
+                                             Background="LightGray"
+                                             Foreground="Black"
+                                             VerticalContentAlignment="Center"
+                                             HorizontalContentAlignment="Center"
+                                             Text="{Binding SettingReg.EthernetSettings.Port}"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                </Grid>
+
+                                <ComboBox Grid.Row="2"
+                                          ItemsSource="{Binding ProtocolConnections}"
+                                          SelectedValue="{Binding SelectedProtocolConnection}"
+                                          Style="{StaticResource CB_Protocol_Style}" />
+                            </Grid>
+                        </md:Card>
+
+                        <UniformGrid Rows="1" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0,10">
+                            <Button Command="{Binding ResetSettingsCommand}" Style="{StaticResource BtnRefreshSetting_Style}" />
+
+                            <Button Command="{Binding SaveCommand}" Style="{StaticResource BtnSaveSetting_Style}" />
+                        </UniformGrid>
+
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
