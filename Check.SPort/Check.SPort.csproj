@@ -8,8 +8,8 @@
 		<SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
 		<UseWindowsForms>True</UseWindowsForms>
 		<AssemblyName>Check Connection Protocoll</AssemblyName>
-		<AssemblyVersion>1.0.3</AssemblyVersion>
-		<FileVersion>1.0.3</FileVersion>
+		<AssemblyVersion>2.0.1</AssemblyVersion>
+		<FileVersion>2.0.1</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

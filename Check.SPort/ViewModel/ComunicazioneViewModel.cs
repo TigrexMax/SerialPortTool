@@ -1,6 +1,7 @@
 ﻿using Check.SPort.Models;
 using Check.SPort.Utilities;
 using Custom.CeFCom;
+using Custom.CeFCom.Enums;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using static Check.SPort.Models.ClasseBaseEstensione;
 
 namespace Check.SPort.ViewModel
 {
@@ -68,8 +70,8 @@ namespace Check.SPort.ViewModel
                 {
                     return settings.Protocollo switch
                     {
-                        "XonXoff" => XonXoff_Seriale(),
-                        "Custom" => Custom_Seriale(),
+                        Costanti.XonXoff or Costanti.XonXoff_NoEcho => XonXoff_Seriale(),
+                        Costanti.Custom or Costanti.Custom_DLL => Custom_Seriale(),
                         _ => false
                     };
                 }
@@ -77,8 +79,8 @@ namespace Check.SPort.ViewModel
                 {
                     return settings.Protocollo switch
                     {
-                        "XonXoff" => XonXoff_Ethernet(),
-                        "Custom" => Custom_Ethernet(),
+                        Costanti.XonXoff or Costanti.XonXoff_NoEcho => XonXoff_Ethernet(),
+                        Costanti.Custom or Costanti.Custom_DLL => Custom_Ethernet(),
                         _ => false
                     };
                 }
@@ -100,7 +102,7 @@ namespace Check.SPort.ViewModel
             var settings = App.SettingsProtocol;
             try
             {
-                if (settings.Protocollo == "Custom")
+                if (settings.Protocollo is Costanti.Custom or Costanti.Custom_DLL)
                 {
                     int resultCommand = 0;
                     if (Connection_Custom.EthernetPortIsOpened || Connection_Custom.SerialPortIsOpened)
@@ -109,7 +111,7 @@ namespace Check.SPort.ViewModel
                         IsConnection = false;
                     }
                 }
-                else if (settings.Protocollo == "XonXoff")
+                else if (settings.Protocollo is Costanti.XonXoff or Costanti.XonXoff_NoEcho)
                 {
                     if (settings.IsEthernet && Connection_XonXoff_Ethernet.Connected)
                     {
@@ -140,22 +142,22 @@ namespace Check.SPort.ViewModel
             {
                 if (settings.IsSeriale)
                 {
-                    if (settings.Protocollo == "XonXoff")
+                    if (settings.Protocollo is Costanti.XonXoff or Costanti.XonXoff_NoEcho)
                     {
                         await XonXoff_Write(true);
                     }
-                    else if (settings.Protocollo == "Custom")
+                    else if (settings.Protocollo is Costanti.Custom or Costanti.Custom_DLL)
                     {
                         Custom_Write();
                     }
                 }
                 else if (settings.IsEthernet)
                 {
-                    if (settings.Protocollo == "XonXoff")
+                    if (settings.Protocollo is Costanti.XonXoff or Costanti.XonXoff_NoEcho)
                     {
                         await XonXoff_Write(false);
                     }
-                    else if (settings.Protocollo == "Custom")
+                    else if (settings.Protocollo is Costanti.Custom or Costanti.Custom_DLL)
                     {
                         Custom_Write();
                     }
@@ -184,11 +186,11 @@ namespace Check.SPort.ViewModel
             {
                 DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
-            if (settings.Protocollo == "Custom")
+            if (settings.Protocollo is Costanti.Custom or Costanti.Custom_DLL)
             {
                 ofd.Filter = "Designer file (*.dsf)|*.dsf|All files (*.*)|*.*";
             }
-            else if (settings.Protocollo == "XonXoff")
+            else if (settings.Protocollo is Costanti.XonXoff or Costanti.XonXoff_NoEcho)
             {
                 ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             }
@@ -380,22 +382,8 @@ namespace Check.SPort.ViewModel
         {
             foreach (var cmd in Comandi.Split(Environment.NewLine))
             {
-                EseguiComando(Connection_Custom, cmd, out string cmdResponse);
-                ScriviResponseBox(cmdResponse);
-            }
-
-            static int EseguiComando(CeFCom ceFCom, string command, out string cmdResponse)
-            {
-                int response = 0;
-                cmdResponse = string.Empty;
-
-                response = ceFCom.CEFWriteRead(command, out cmdResponse);
-
-                if (cmdResponse.Contains("ERR99"))
-                {
-                    response = ceFCom.CEFWriteRead("1015", out cmdResponse);
-                }
-                return response;
+                int operation = Connection_Custom.EseguiComando(cmd, out string cmdResponse);
+                ScriviResponseBox($"{cmdResponse} {(ErrorListEnum)operation}");
             }
         }
         #endregion Custom

@@ -53,6 +53,7 @@
 
                             <Button x:Name="BtnOpen"
                                     VerticalAlignment="Top"
+                                    Effect="{StaticResource ShadowDepth8}"
                                     Command="{Binding OnOffCommand}"
                                     CommandParameter="{Binding ElementName=BtnOpen}"
                                     Style="{StaticResource OpenBtnStyle}" />
@@ -73,6 +74,7 @@
                                         BorderThickness="1.5"
                                         BorderBrush="Gray"
                                         Grid.Column="1"
+                                        Effect="{StaticResource ShadowDepth8}"
                                         Command="{Binding ActiveFlipperCommand}"
                                         Style="{StaticResource MaterialDesignFlatButton}">
                                     <TextBlock Text="View Response" TextWrapping="Wrap" TextAlignment="Center" />
@@ -149,10 +151,12 @@
                         <UniformGrid Rows="2" Grid.Column="2" VerticalAlignment="Top">
 
                             <Button x:Name="BtnSend"
+                                    Effect="{StaticResource ShadowDepth8}"
                                     Command="{Binding SendCommand}"
                                     Style="{StaticResource SendButtonStyle}" />
 
                             <Button x:Name="BtnFile"
+                                    Effect="{StaticResource ShadowDepth8}"
                                     Command="{Binding FileCommand}"
                                     Style="{StaticResource FileButtonStyle}" />
 

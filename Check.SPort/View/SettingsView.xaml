@@ -187,7 +187,7 @@
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                                 </Grid>
 
-                                <ComboBox Grid.Row="2" 
+                                <ComboBox Grid.Row="2"
                                           ItemsSource="{Binding ProtocolConnections}"
                                           SelectedValue="{Binding SelectedProtocolConnection}"
                                           Style="{StaticResource CB_Protocol_Style}" />

@@ -143,7 +143,7 @@ namespace Check.SPort.Models
                 Rts = true;
             }
         }
-        protected void OnNotifyChanged([CallerMemberName] string propertyName = null) =>
+        private void OnNotifyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         #endregion Metodi
     }

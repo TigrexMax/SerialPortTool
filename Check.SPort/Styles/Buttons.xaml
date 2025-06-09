@@ -100,7 +100,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
 
-                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7" >
+                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
                         <md:PackIcon x:Name="BtnSend" Kind="Send" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" />
                     </Border>
 
@@ -130,7 +130,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
 
-                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7" >
+                    <Border x:Name="BorderBtn" Background="DarkTurquoise" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
                         <md:PackIcon x:Name="BtnSend" Kind="FileCode" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" />
                     </Border>
 
@@ -153,13 +153,13 @@
 
     <Style x:Key="OpenBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="10,5" />
-        <Setter Property="Width" Value="75" />
+        <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="70" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="BorderBtn" Background="Gray" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="7">
+                    <Border x:Name="BorderBtn" Background="Gray" BorderThickness="10,3.5" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="30">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -192,6 +192,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="md:ElevationAssist.Elevation" Value="Dp6" />
     </Style>
 
     <Style x:Key="BtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedDarkButton}">

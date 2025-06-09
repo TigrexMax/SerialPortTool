@@ -33,6 +33,7 @@
             <DataTemplate DataType="{x:Type vm:ComunicazioneViewModel}">
                 <view:ComunicazioneView />
             </DataTemplate>
+            
         </ResourceDictionary>
 
     </Application.Resources>

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Check.SPort.Models.ClasseBaseEstensione;
 
 namespace Check.SPort.ViewModel
 {
@@ -45,7 +46,7 @@ namespace Check.SPort.ViewModel
             SaveCommand = new RelayCommand(SaveSetting);
             ResetSettingsCommand = new RelayCommand(RefreshSettingsCassa);
 
-            ProtocolConnections = new() { "XonXoff", "Custom" };
+            ProtocolConnections = [Costanti.XonXoff, Costanti.XonXoff_NoEcho, Costanti.Custom, Costanti.Custom_DLL];
         }
 
         #region Command
