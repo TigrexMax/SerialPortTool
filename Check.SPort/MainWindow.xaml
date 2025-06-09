@@ -288,9 +288,9 @@
                 </TextBlock>
             </Border>
 
-            <Button Grid.Column="1" Grid.Row="1" x:Name="MinApp" Style="{StaticResource MiniAppStyle}" Command="{Binding MiniAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
-            <Button Grid.Column="2" Grid.Row="1" x:Name="MaxApp" Style="{StaticResource MaxAppStyle}" Command="{Binding MaxAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
-            <Button Grid.Column="3" Grid.Row="1" x:Name="CloseApp" Style="{StaticResource ExitApp}" Command="{Binding CloseAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}"/>
+            <Button Grid.Column="1" Grid.Row="1" x:Name="MinApp" Style="{StaticResource MiniAppStyle}" Command="{Binding MiniAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
+            <Button Grid.Column="2" Grid.Row="1" x:Name="MaxApp" Style="{StaticResource MaxAppStyle}" Command="{Binding MaxAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
+            <Button Grid.Column="3" Grid.Row="1" x:Name="CloseApp" Style="{StaticResource ExitApp}" Command="{Binding CloseAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
         </Grid>
         
     </Grid>

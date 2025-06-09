@@ -15,6 +15,7 @@ namespace Check.SPort.ViewModel
     {
         #region Property
         private object _currentView;
+        private Visibility _nascondiButton;
         #endregion Property
 
         public NavigationViewModel()
@@ -25,6 +26,7 @@ namespace Check.SPort.ViewModel
 
             // Startup Page
             CurrentViewModel = new HomeViewModel();
+            NascondiButton = Visibility.Visible;
         }
 
         #region Command
@@ -41,6 +43,7 @@ namespace Check.SPort.ViewModel
         public async void CloseApp(object obj)
         {
             DisposeConnection();
+            NascondiButton = Visibility.Hidden;
 
             MainWindow win = obj as MainWindow;
             win.ResizeMode = ResizeMode.NoResize;
@@ -93,6 +96,12 @@ namespace Check.SPort.ViewModel
         {
             get => _currentView;
             set { _currentView = value; OnPropertyChanged(nameof(CurrentViewModel)); }
+        }
+
+        public Visibility NascondiButton
+        {
+            get => _nascondiButton;
+            set { _nascondiButton = value; OnPropertyChanged(nameof(NascondiButton)); }
         }
         #endregion Binding
     }
