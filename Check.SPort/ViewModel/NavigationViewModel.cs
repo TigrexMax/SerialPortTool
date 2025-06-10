@@ -84,7 +84,7 @@ namespace Check.SPort.ViewModel
         private void XonXoff(object obj) => CurrentViewModel = new ComunicazioneViewModel();
         private void Custom(object obj) => CurrentViewModel = new SettingsViewModel();
 
-        private void DisposeConnection()
+        private static void DisposeConnection()
         {
             App.SettingsProtocol.SerialPort.Dispose();
             App.SettingsProtocol.TcpClient.Dispose();

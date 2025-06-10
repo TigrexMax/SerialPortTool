@@ -100,7 +100,7 @@
         <!--// Window Border //-->
         <Border Background="#212529" CornerRadius="20,00,0,20" BorderThickness="5" BorderBrush="#3A4149" />
 
-        <Grid>
+        <Grid MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
             <!--// Base Grid //-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -108,7 +108,7 @@
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
-            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65" MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
+            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65">
                 <Border Background="#272B2F" CornerRadius="20,0,0,20" />
 
                 <Grid>
