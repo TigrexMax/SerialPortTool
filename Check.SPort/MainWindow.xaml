@@ -19,7 +19,8 @@
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         Background="Transparent"
-        x:Name="ResponsiveWindow">
+        x:Name="ResponsiveWindow"
+        Icon="/Resources/Image/Icon_Tool.ico">
 
     <Window.DataContext>
         <vm:NavigationViewModel />

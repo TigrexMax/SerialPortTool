@@ -7,14 +7,19 @@
 		<UseWPF>true</UseWPF>
 		<SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
 		<UseWindowsForms>True</UseWindowsForms>
-		<AssemblyName>Check Connection Protocoll</AssemblyName>
+		<AssemblyName>ProtocolConnection</AssemblyName>
 		<AssemblyVersion>2.0.1</AssemblyVersion>
 		<FileVersion>2.0.1</FileVersion>
+		<ApplicationIcon>Icon_Tool.ico</ApplicationIcon>
+		<Version>2.0.3</Version>
+		<PackageIcon>Img_Tool.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="Resources\DLL\CustomEngineering.CeFCom.dll" />
 		<None Remove="Resources\Image\home_sfondo_2.png" />
+		<None Remove="Resources\Image\Icon_Tool.ico" />
 		<None Remove="Resources\Image\sfondo_001.jpg" />
 	</ItemGroup>
 
@@ -24,10 +29,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Icon_Tool.ico" />
 		<Content Include="Resources\DLL\CustomEngineering.CeFCom.dll">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Resources\Image\home_sfondo_2.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Image\Icon_Tool.ico">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Image\Img_Tool.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Resources\Image\sfondo_001.jpg">
@@ -36,9 +48,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Reference Include="CustomEngineering.CeFCom">
 	    <HintPath>Resources\DLL\CustomEngineering.CeFCom.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\Image\Img_Tool.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
