@@ -19,7 +19,8 @@
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         Background="Transparent"
-        x:Name="ResponsiveWindow">
+        x:Name="ResponsiveWindow"
+        Icon="/Resources/Image/Icon_Tool.ico">
 
     <Window.DataContext>
         <vm:NavigationViewModel />
@@ -100,7 +101,7 @@
         <!--// Window Border //-->
         <Border Background="#212529" CornerRadius="20,00,0,20" BorderThickness="5" BorderBrush="#3A4149" />
 
-        <Grid>
+        <Grid MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
             <!--// Base Grid //-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -108,7 +109,7 @@
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
-            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65" MouseLeftButtonDown="BorderMove_MouseLeftButtonDown">
+            <Grid x:Name="nav_pnl" HorizontalAlignment="Left" Width="65">
                 <Border Background="#272B2F" CornerRadius="20,0,0,20" />
 
                 <Grid>
@@ -288,9 +289,9 @@
                 </TextBlock>
             </Border>
 
-            <Button Grid.Column="1" Grid.Row="1" x:Name="MinApp" Style="{StaticResource MiniAppStyle}" Command="{Binding MiniAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
-            <Button Grid.Column="2" Grid.Row="1" x:Name="MaxApp" Style="{StaticResource MaxAppStyle}" Command="{Binding MaxAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" />
-            <Button Grid.Column="3" Grid.Row="1" x:Name="CloseApp" Style="{StaticResource ExitApp}" Command="{Binding CloseAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}"/>
+            <Button Grid.Column="1" Grid.Row="1" x:Name="MinApp" Style="{StaticResource MiniAppStyle}" Command="{Binding MiniAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
+            <Button Grid.Column="2" Grid.Row="1" x:Name="MaxApp" Style="{StaticResource MaxAppStyle}" Command="{Binding MaxAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
+            <Button Grid.Column="3" Grid.Row="1" x:Name="CloseApp" Style="{StaticResource ExitApp}" Command="{Binding CloseAppCommand}" CommandParameter="{Binding ElementName=ResponsiveWindow}" Visibility="{Binding NascondiButton}" />
         </Grid>
         
     </Grid>
