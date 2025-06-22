@@ -10,9 +10,9 @@
 		<AssemblyName>ProtocolConnection</AssemblyName>
 		<AssemblyVersion>2.0.4</AssemblyVersion>
 		<FileVersion>2.0.4</FileVersion>
-		<ApplicationIcon>Resources\Image\Icon_Tool.ico</ApplicationIcon>
+		<ApplicationIcon>Resources\Image\Icon_Tool_2.ico</ApplicationIcon>
 		<Version>2.0.4</Version>
-		<PackageIcon>Img_Tool.png</PackageIcon>
+		<PackageIcon>Icon_Tool_2.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<NeutralLanguage>it</NeutralLanguage>
 		<Authors>Francesco Rubino</Authors>
@@ -21,8 +21,7 @@
 	<ItemGroup>
 		<None Remove="Resources\DLL\CustomEngineering.CeFCom.dll" />
 		<None Remove="Resources\Image\home_sfondo_2.png" />
-		<None Remove="Resources\Image\Icon_Tool.ico" />
-		<None Remove="Resources\Image\sfondo_001.jpg" />
+		<None Remove="Resources\Image\Icon_Tool_2.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,14 +36,11 @@
 		<Content Include="Resources\Image\home_sfondo_2.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Resources\Image\Icon_Tool.ico">
+		<Content Include="Resources\Image\Icon_Tool_2.ico">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Resources\Image\Img_Tool.png">
+		<Content Include="Resources\Image\Icon_Tool_2.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="Resources\Image\sfondo_001.jpg">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
@@ -62,7 +58,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Resources\Image\Img_Tool.png">
+	  <None Update="Resources\Image\Icon_Tool_2.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
